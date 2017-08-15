@@ -4,7 +4,8 @@
   "description": "Command line utilities for creating common react native patterns.",
   "main": "index.ts",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "tsc": "./node_modules/typescript/bin/tsc"
   },
   "repository": {
     "type": "git",
@@ -20,5 +21,27 @@
   "bugs": {
     "url": "https://github.com/tm-3/rnutils/issues"
   },
-  "homepage": "https://github.com/tm-3/rnutils#readme"
+  "bin": {
+    "rnutils": "./index.js"
+  },
+  "homepage": "https://github.com/tm-3/rnutils#readme",
+  "dependencies": {
+    "chalk": "^2.1.0",
+    "clear": "^0.0.1",
+    "clui": "^0.3.6",
+    "figlet": "^1.2.0",
+    "inquirer": "^3.2.1",
+    "lodash": "^4.17.4",
+    "minimist": "^1.2.0",
+    "preferences": "^0.2.1",
+    "shelljs": "^0.7.8"
+  },
+  "devDependencies": {
+    "@types/chalk": "^0.4.31",
+    "@types/inquirer": "^0.0.35",
+    "@types/lodash": "^4.14.72",
+    "@types/minimist": "^1.2.0",
+    "@types/shelljs": "^0.7.4",
+    "typescript": "^2.4.2"
+  }
 }
