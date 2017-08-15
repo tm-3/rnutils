@@ -16,7 +16,8 @@
     "react",
     "native",
     "typescript",
-    "storybook"
+    "storybook",
+    "mobx"
   ],
   "author": "Tom Miller",
   "license": "MIT",
