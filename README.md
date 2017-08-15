@@ -9,6 +9,11 @@ This is a simple command line utility to help create the basic patterns that I u
 * Jest
 * Mobx
 
+## Installation ##
+
+**NOT YET PUBLISHED**
+For now, clone the project and run `yarn tsc` from the project root to transpile the typescript. You can run `npm install -g` from the project root to make this accessible globally while it is still in development.
+
 ## Functions ##
 
 **Setup Typescript**

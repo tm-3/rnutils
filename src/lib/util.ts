@@ -38,20 +38,21 @@ export class Util {
         try
         { 
             if(this.projectRoot != null) {
-                shelljs.mkdir(
+                shelljs.mkdir('-p',
                     [
-                        this.projectRoot + '/src',
+                        
                         this.projectRoot + '/src/components',
                         this.projectRoot + '/src/config',
                         this.projectRoot + '/src/navigation',
                         this.projectRoot + '/src/screens',
                         this.projectRoot + '/src/stores',
-                        this.projectRoot + '/__tests__',
+                        this.projectRoot + '/src/util', 
                         this.projectRoot + '/__tests__/components',
                         this.projectRoot + '/__tests__/config',
                         this.projectRoot + '/__tests__/navigation',
                         this.projectRoot + '/__tests__/screens',
-                        this.projectRoot + '/__tests__/stores'
+                        this.projectRoot + '/__tests__/stores',
+                        this.projectRoot + '/__tests__/util'
                     ]
                 )
             }
