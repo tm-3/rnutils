@@ -1,0 +1,24 @@
+{
+  "name": "rnutils",
+  "version": "0.0.1",
+  "description": "Command line utilities for creating common react native patterns.",
+  "main": "index.ts",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tm-3/rnutils.git"
+  },
+  "keywords": [
+    "react",
+    "native",
+    "typescript"
+  ],
+  "author": "Tom Miller",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/tm-3/rnutils/issues"
+  },
+  "homepage": "https://github.com/tm-3/rnutils#readme"
+}
