@@ -6,14 +6,16 @@ import * as figlet from 'figlet';
 import * as chalk from 'chalk';
 import * as inquirer from 'inquirer';
 
-import { Util } from './lib/util';
+import { Util } from './lib/';
+
+let util = new Util();
 
 
 
 clear();
 console.log(
     chalk.green(
-        figlet.textSync('rnutils', {
+        figlet.textSync('React Native Utilities', {
             horizontalLayout: 'default',
             verticalLayout: 'default'
         })
@@ -33,7 +35,8 @@ function menuPrompt() {
                 new inquirer.Separator(),
                 'Create Directory Structure',
                 'Setup Typescript',
-                'Setup Storybook'
+                'Setup Storybook',
+                'Create Scripts'
             ]
         }
     ]).then((answers) => {
@@ -56,6 +59,9 @@ function menuPrompt() {
                 break;
             case 'Setup Storybook':
                 setupStorybook();
+                break;
+            case 'Create Scripts':
+                setupScripts();
                 break;    
             default:
                 break;
@@ -63,37 +69,74 @@ function menuPrompt() {
     })
 }
 
+
 function createComponent() {
-    console.log('create component');
+    if(util.projectRoot !== null) {
+
+    }
+    else {
+        notInProject();
+    }
 }
 
 function createScreen() {
-    console.log('create screen')
+    if(util.projectRoot !== null) {
+        
+    }
+    else {
+        notInProject();
+    }
 }
 
 function createMobxStore() {
-    console.log('create mobx')
+    if(util.projectRoot !== null) {
+        
+    }
+    else {
+        notInProject();
+    }
 }
 
 function createDirectoryStructure() {
-    console.log('create ds')
+    if(util.projectRoot !== null) {
+        util.createStructure();
+    }
+    else {
+        notInProject();
+    }
 }
 
 function setupTypescript() {
-    console.log('setup typescript')
+    if(util.projectRoot !== null) {
+        
+    }
+    else {
+        notInProject();
+    }
 }
 
 function setupStorybook() {
-    console.log('setup storybook')
-
+    if(util.projectRoot !== null) {
+        
+    }
+    else {
+        notInProject();
+    }
     
 }
 
 function setupScripts() {
-    console.log('setup scripts')
+    if(util.projectRoot !== null) {
+        
+    }
+    else {
+        notInProject();
+    }
 }
 
-
+function notInProject() {
+    console.log('You do not appear to be in a project. Please run rnutils from within your react native project.')
+}
 
 
 menuPrompt()
