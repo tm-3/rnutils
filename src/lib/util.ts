@@ -2,6 +2,7 @@ import * as shelljs from 'shelljs';
 import * as fs from 'fs';
 import * as pkgUp from 'pkg-up';
 
+
 export class Util {
     constructor() {
         this.getProjectRoot();
@@ -67,7 +68,17 @@ export class Util {
         }
     }
 
-    static addStandardScripts() {
+    addStandardScripts() {
         
+    }
+
+    setupTypeScript() {
+        if(this.projectRoot === this.cwd) {
+
+        }
+        else {
+            console.log('Please run this option from your project root.');
+        }
+
     }
 }

@@ -6,7 +6,7 @@ import * as figlet from 'figlet';
 import * as chalk from 'chalk';
 import * as inquirer from 'inquirer';
 
-import { Util } from './lib/';
+import { Util, createComponent } from './lib/';
 
 let util = new Util();
 
@@ -15,7 +15,7 @@ let util = new Util();
 clear();
 console.log(
     chalk.green(
-        figlet.textSync('React Native Utilities', {
+        figlet.textSync('rnutils', {
             horizontalLayout: 'default',
             verticalLayout: 'default'
         })
@@ -40,13 +40,21 @@ function menuPrompt() {
             ]
         }
     ]).then((answers) => {
-
         switch (answers.options) {
             case 'Create Component':
-                createComponent();
+                    
+                inquirer.prompt({
+                    type: 'input',
+                    name: 'componentName',
+                    message: 'Enter your component name. Components will be created in ./src/components. You can provide a subdirectory if necessary (subdir/componentName): '
+                    
+                }).then((answer) => {
+                    createNewComponent(answer.componentName);
+                })
+
                 break;
             case 'Create Screen':
-                createScreen();
+                
                 break;
             case 'Create Mobx Store':
                 createMobxStore();
@@ -70,9 +78,9 @@ function menuPrompt() {
 }
 
 
-function createComponent() {
+function createNewComponent(componentName) {
     if(util.projectRoot !== null) {
-
+        createComponent(componentName);
     }
     else {
         notInProject();

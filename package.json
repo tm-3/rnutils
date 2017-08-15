@@ -28,7 +28,7 @@
   },
   "homepage": "https://github.com/tm-3/rnutils#readme",
   "dependencies": {
-    "@types/handlebars": "^4.0.35",
+    
     "chalk": "^2.1.0",
     "clear": "^0.0.1",
     "clui": "^0.3.6",
@@ -43,6 +43,7 @@
   },
   "devDependencies": {
     "@types/chalk": "^0.4.31",
+    "@types/handlebars": "^4.0.35",
     "@types/inquirer": "^0.0.35",
     "@types/lodash": "^4.14.72",
     "@types/minimist": "^1.2.0",

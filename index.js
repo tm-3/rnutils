@@ -8,7 +8,7 @@ const inquirer = require("inquirer");
 const _1 = require("./lib/");
 let util = new _1.Util();
 clear();
-console.log(chalk.green(figlet.textSync('React Native Utilities', {
+console.log(chalk.green(figlet.textSync('rnutils', {
     horizontalLayout: 'default',
     verticalLayout: 'default'
 })));
@@ -26,17 +26,21 @@ function menuPrompt() {
                 'Create Directory Structure',
                 'Setup Typescript',
                 'Setup Storybook',
-                new inquirer.Separator(),
-                'Set Preferences'
+                'Create Scripts'
             ]
         }
     ]).then((answers) => {
         switch (answers.options) {
             case 'Create Component':
-                createComponent();
+                inquirer.prompt({
+                    type: 'input',
+                    name: 'componentName',
+                    message: 'Enter your component name. Components will be created in ./src/components. You can provide a subdirectory if necessary (subdir/componentName): '
+                }).then((answer) => {
+                    createNewComponent(answer.componentName);
+                });
                 break;
             case 'Create Screen':
-                createScreen();
                 break;
             case 'Create Mobx Store':
                 createMobxStore();
@@ -50,18 +54,17 @@ function menuPrompt() {
             case 'Setup Storybook':
                 setupStorybook();
                 break;
-            case 'Set Preferences':
-                setPreferences();
+            case 'Create Scripts':
+                setupScripts();
                 break;
             default:
                 break;
         }
     });
 }
-function setPreferences() {
-}
-function createComponent() {
+function createNewComponent(componentName) {
     if (util.projectRoot !== null) {
+        _1.createComponent(componentName);
     }
     else {
         notInProject();
