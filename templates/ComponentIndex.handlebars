@@ -1,3 +1,5 @@
+{{#unless isStateless}} 
 export * from './I{{componentName}}State';
+{{/unless}}
 export * from './I{{componentName}}Props';
-export * from '{{componentName}}';
+export * from './{{componentName}}';

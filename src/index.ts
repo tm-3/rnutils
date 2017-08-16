@@ -6,7 +6,7 @@ import * as figlet from 'figlet';
 import * as chalk from 'chalk';
 import * as inquirer from 'inquirer';
 
-import { Util, createComponent } from './lib/';
+import { Util, createComponent, createScreen } from './lib/';
 
 let util = new Util();
 
@@ -30,6 +30,7 @@ function menuPrompt() {
             message: 'What do you want to do?',
             choices: [
                 'Create Component',
+                'Create Stateless Component',
                 'Create Screen',
                 'Create Mobx Store',
                 new inquirer.Separator(),
@@ -53,8 +54,25 @@ function menuPrompt() {
                 })
 
                 break;
+            case 'Create Stateless Component':
+                inquirer.prompt({
+                    type: 'input',
+                    name: 'componentName',
+                    message: 'Enter your component name. Components will be created in ./src/components. You can provide a subdirectory if necessary (subdir/componentName): '
+                    
+                }).then((answer) => {
+                    createNewStatelessComponent(answer.componentName);
+                })
+                break;
             case 'Create Screen':
-                
+                inquirer.prompt({
+                    type: 'input',
+                    name: 'screenName',
+                    message: 'Enter your screen name. Screens will be created in ./src/screens. You can provide a subdirectory if necessary (subdir/componentName): '
+                    
+                }).then((answer) => {
+                    createNewScreen(answer.screenName);
+                })
                 break;
             case 'Create Mobx Store':
                 createMobxStore();
@@ -80,15 +98,25 @@ function menuPrompt() {
 
 function createNewComponent(componentName) {
     if(util.projectRoot !== null) {
-        createComponent(componentName);
+        createComponent(componentName, false);
     }
     else {
         notInProject();
     }
 }
 
-function createScreen() {
+function createNewStatelessComponent(componentName) {
     if(util.projectRoot !== null) {
+        createComponent(componentName, true);
+    }
+    else {
+        notInProject();
+    }
+}
+
+function createNewScreen(screenName) {
+    if(util.projectRoot !== null) {
+        createScreen(screenName);
         
     }
     else {

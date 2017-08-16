@@ -62,11 +62,15 @@ The files will contain basic boilerplate and the index.ts will take care of expo
 
 **Create Stateless Component** 
 
-*not yet implemeneted*
+This command will create a stateless component at the `/components/ComponentName` directory along with three files: 
+
+* Component.ts
+* IComponentProps.ts
+* index.ts
+
+The files will contain basic boilerplate and the index.ts will take care of exporting each file.
 
 **Create Screen**
-
-*not yet implemeneted*
 
 This command will create a component at the `/screens/ScreenName` directory along with four files: 
 

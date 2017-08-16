@@ -20,6 +20,7 @@ function menuPrompt() {
             message: 'What do you want to do?',
             choices: [
                 'Create Component',
+                'Create Stateless Component',
                 'Create Screen',
                 'Create Mobx Store',
                 new inquirer.Separator(),
@@ -40,7 +41,23 @@ function menuPrompt() {
                     createNewComponent(answer.componentName);
                 });
                 break;
+            case 'Create Stateless Component':
+                inquirer.prompt({
+                    type: 'input',
+                    name: 'componentName',
+                    message: 'Enter your component name. Components will be created in ./src/components. You can provide a subdirectory if necessary (subdir/componentName): '
+                }).then((answer) => {
+                    createNewStatelessComponent(answer.componentName);
+                });
+                break;
             case 'Create Screen':
+                inquirer.prompt({
+                    type: 'input',
+                    name: 'screenName',
+                    message: 'Enter your screen name. Screens will be created in ./src/screens. You can provide a subdirectory if necessary (subdir/componentName): '
+                }).then((answer) => {
+                    createNewScreen(answer.screenName);
+                });
                 break;
             case 'Create Mobx Store':
                 createMobxStore();
@@ -64,14 +81,23 @@ function menuPrompt() {
 }
 function createNewComponent(componentName) {
     if (util.projectRoot !== null) {
-        _1.createComponent(componentName);
+        _1.createComponent(componentName, false);
     }
     else {
         notInProject();
     }
 }
-function createScreen() {
+function createNewStatelessComponent(componentName) {
     if (util.projectRoot !== null) {
+        _1.createComponent(componentName, true);
+    }
+    else {
+        notInProject();
+    }
+}
+function createNewScreen(screenName) {
+    if (util.projectRoot !== null) {
+        _1.createScreen(screenName);
     }
     else {
         notInProject();
