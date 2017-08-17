@@ -2,7 +2,7 @@ import * as shelljs from 'shelljs';
 import * as fs from 'fs';
 import * as handlebars from 'handlebars';
 import * as pkgUp from 'pkg-up';
-var hbt = require('../templates/templates.js');
+var hbt = require('../lib/templates/templates.js');
 
 
 export class ComponentTools { 
@@ -30,18 +30,18 @@ export class ComponentTools {
             let template = null;
             
             if(isStateless) {
-                template = handlebars.templates['Component'];
+                template = handlebars.templates['StatelessComponent'];
             }
             else 
             {
-                template = handlebars.templates['StatelessComponent'];
+                template = handlebars.templates['Component'];
             }
 
             let context = {componentName: componentName};
 
             let file = template(context);
 
-            fs.writeFileSync(componentPath + '/' + componentName + '.ts', file);
+            fs.writeFileSync(componentPath + '/' + componentName + '.tsx', file);
         }
         catch (err) 
         {
@@ -89,7 +89,7 @@ export class ComponentTools {
         try
         {
             
-            let template = handlebars.templates['index'];
+            let template = handlebars.templates['ComponentIndex'];
             let context = {componentName: componentName, isStateless: isStateless};
 
             let file = template(context);

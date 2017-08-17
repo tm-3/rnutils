@@ -36,11 +36,11 @@ export class ProjectTools {
      * @typesreact-test-renderer
      * @types/jest
      */
-    installDevDependencies() {
+    async installDevDependencies() {
         let packages = [
             'typescript', 
             'jest-expo-ts', 
-            'react-test-renderer',
+            'react-test-renderer@16.0.0-alpha.12',
             'react-native-typescript-transformer',
             '@types/react',
             '@types/react-native',
@@ -53,7 +53,7 @@ export class ProjectTools {
         })
     }
 
-    installDependencies() {
+    async installDependencies() {
         let packages = [
             'mobx',
             'mobx-react'
@@ -68,21 +68,20 @@ export class ProjectTools {
     /**
      * Add sourceExts/transformer to app.json
     */
-    modifyAppJson() {
+    async modifyAppJson() {
 
         try 
         {
-            let appJson = fs.readFileSync(this.projectRoot + '/app.json').toString();
-            let appJsonObject = JSON.parse(appJson);
+            let appJson = JSON.parse(fs.readFileSync(this.projectRoot + '/app.json').toString());
 
-            if(appJsonObject.expo.packagerOpts === undefined) {
-                appJsonObject.expo.packagerOpts = {};
+            if(appJson.expo.packagerOpts === undefined) {
+                appJson.expo.packagerOpts = {};
             }
 
-            appJsonObject.expo.packagerOpts.sourceExts = [ 'ts', 'tsx'];
-            appJsonObject.expo.packagerOpts.transformer = 'node_modules/react-native-typescript-transformer/index.js';
+            appJson.expo.packagerOpts.sourceExts = [ 'ts', 'tsx'];
+            appJson.expo.packagerOpts.transformer = 'node_modules/react-native-typescript-transformer/index.js';
             
-            fs.writeFileSync(this.projectRoot + '/app.json', JSON.stringify(appJsonObject, null, 4));
+            fs.writeFileSync(this.projectRoot + '/app.json', JSON.stringify(appJson, null, 4));
         }
         catch (err)
         {
@@ -93,14 +92,39 @@ export class ProjectTools {
     /**
      * Modify Scripts
      */
-    createDevScripts() {
-        
+    async createDevScripts() {
+        try
+        {
+
+
+            let packageJson = JSON.parse(fs.readFileSync(this.projectRoot + '/package.json').toString());
+
+            packageJson.scripts = {
+                "prestart": "yarn cleanWatchman",
+                "start": "react-native-scripts start",
+                "eject": "react-native-scripts eject",
+                "android": "react-native-scripts android",
+                "ios": "react-native-scripts ios",
+                "test": "node node_modules/jest/bin/jest.js --watch",
+                "cleanWatchman": "watchman watch-del-all",
+                "startEmulator": "~/Android/Sdk/tools/emulator -avd Pixel_XL_API_26 &",
+                "preandroid": "yarn cleanWatchman & yarn startEmulator &",
+                "increaseWatches": "sudo sysctl -w fs.inotify.max_user_watches=10000"
+              }
+
+            fs.writeFileSync(this.projectRoot + '/package.json', JSON.stringify(packageJson, null, 2));
+
+        }
+        catch (err)
+        {
+            console.log(err);
+        }
     }
 
     /**
      * Create tsconfig file
      */
-    createTsConfigJson() {
+    async createTsConfigJson() {
         let config = {
             "compilerOptions": {
                 "allowJs": true,
@@ -124,7 +148,7 @@ export class ProjectTools {
     /**
      * Creates a standard directory structure. 
      */
-    createStructure() {
+    async createStructure() {
         try
         { 
             if(this.projectRoot !== null) {
@@ -175,7 +199,7 @@ export class ProjectTools {
         }
     }
 
-    setupDebugging() {
+    async setupDebugging() {
         let settings = {
             "react-native": {
                 "packager" : {

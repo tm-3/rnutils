@@ -1,0 +1,16 @@
+import * as react from 'react';
+import { View } from 'react-native';
+import { observable } from 'mobx';
+import { observer } from 'mobx-react';
+
+import { I{{componentName}}Props, I{{componentName}}State } from './'
+
+@observer
+export class {{componentName}} extends react.Component<I{{componentName}}Props, I{{componentName}}State> {
+
+    render() {
+        return(
+            <View></View>
+        )
+    }
+}
