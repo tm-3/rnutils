@@ -6,7 +6,7 @@
   "scripts": {
     "test": "jest",
     "tsc": "./node_modules/typescript/bin/tsc",
-    "compileHandlebars": "./node_modules/handlebars/bin/handlebars ./templates/ -f ./templates/templates.js"
+    "compileHandlebars": "./node_modules/handlebars/bin/handlebars ./src/templates/ -f ./src/templates/templates.js --commonjs=handlebars"
   },
   "repository": {
     "type": "git",
@@ -29,7 +29,6 @@
   },
   "homepage": "https://github.com/tm-3/rnutils#readme",
   "dependencies": {
-    
     "chalk": "^2.1.0",
     "clear": "^0.0.1",
     "clui": "^0.3.6",
@@ -40,7 +39,8 @@
     "minimist": "^1.2.0",
     "pkg-up": "^2.0.0",
     "preferences": "^0.2.1",
-    "shelljs": "^0.7.8"
+    "shelljs": "^0.7.8",
+    "yarn-api": "^1.1.0"
   },
   "devDependencies": {
     "@types/chalk": "^0.4.31",

@@ -1,35 +1,42 @@
 {
     "expo": {
-      "name": "walktracker",
-      "description": "A simple app to track your walk",
-      "slug": "walktracker",
-      "privacy": "public",
-      "sdkVersion": "18.0.0",
-      "version": "1.0.0",
-      "orientation": "portrait",
-      "primaryColor": "#cccccc",
-      "icon": "./assets/icons/app.png",
-      "loading": {
-        "icon": "./assets/icons/loading.png",
-        "hideExponentText": false
-      },
-      "packagerOpts": {
-        "assetExts": ["ttf", "mp4"]
-      },
-      "ios": {
-        "supportsTablet": true
-      },
-      "android": {
-        "package": "community.nomadic.walktracker",
-        "config": {
-          "googleSignIn": {
-            "apiKey": "AIzaSyC9JHmZzQ9iV6Fbk9mtWE7RkroCEQyh-Bo"
-          },
-          "googleMaps": {
-            "apiKey": "AIzaSyC9JHmZzQ9iV6Fbk9mtWE7RkroCEQyh-Bo"
-          }
+        "name": "walktracker",
+        "description": "A simple app to track your walk",
+        "slug": "walktracker",
+        "privacy": "public",
+        "sdkVersion": "18.0.0",
+        "version": "1.0.0",
+        "orientation": "portrait",
+        "primaryColor": "#cccccc",
+        "icon": "./assets/icons/app.png",
+        "loading": {
+            "icon": "./assets/icons/loading.png",
+            "hideExponentText": false
+        },
+        "packagerOpts": {
+            "assetExts": [
+                "ttf",
+                "mp4"
+            ],
+            "sourceExts": [
+                "ts",
+                "tsx"
+            ],
+            "transformer": "node_modules/react-native-typescript-transformer/index.js"
+        },
+        "ios": {
+            "supportsTablet": true
+        },
+        "android": {
+            "package": "community.nomadic.walktracker",
+            "config": {
+                "googleSignIn": {
+                    "apiKey": "AIzaSyC9JHmZzQ9iV6Fbk9mtWE7RkroCEQyh-Bo"
+                },
+                "googleMaps": {
+                    "apiKey": "AIzaSyC9JHmZzQ9iV6Fbk9mtWE7RkroCEQyh-Bo"
+                }
+            }
         }
-      }
     }
-  }
-  
+}

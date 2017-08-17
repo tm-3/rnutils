@@ -1,18 +1,28 @@
 #!/usr/bin/env node
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const fs = require("fs");
 const clear = require("clear");
 const figlet = require("figlet");
 const chalk = require("chalk");
 const inquirer = require("inquirer");
+const shelljs = require("shelljs");
 const _1 = require("./lib/");
-let util = new _1.Util();
-clear();
-console.log(chalk.green(figlet.textSync('rnutils', {
-    horizontalLayout: 'default',
-    verticalLayout: 'default'
-})));
+let componentTools = new _1.ComponentTools();
+let projectTools = new _1.ProjectTools();
+function init() {
+    clear();
+    console.log(chalk.green(figlet.textSync('rnutils', {
+        horizontalLayout: 'default',
+        verticalLayout: 'default'
+    })));
+}
 function menuPrompt() {
+    clear();
+    console.log(chalk.green(figlet.textSync('rnutils', {
+        horizontalLayout: 'default',
+        verticalLayout: 'default'
+    })));
     inquirer.prompt([
         {
             type: 'list',
@@ -22,12 +32,11 @@ function menuPrompt() {
                 'Create Component',
                 'Create Stateless Component',
                 'Create Screen',
-                'Create Mobx Store',
                 new inquirer.Separator(),
-                'Create Directory Structure',
-                'Setup Typescript',
-                'Setup Storybook',
-                'Create Scripts'
+                'Post CRNA Config',
+                new inquirer.Separator(),
+                'Exit',
+                new inquirer.Separator()
             ]
         }
     ]).then((answers) => {
@@ -39,7 +48,7 @@ function menuPrompt() {
                     message: 'Enter your component name. Components will be created in ./src/components. You can provide a subdirectory if necessary (subdir/componentName): '
                 }).then((answer) => {
                     createNewComponent(answer.componentName);
-                });
+                }).then(() => { menuPrompt(); });
                 break;
             case 'Create Stateless Component':
                 inquirer.prompt({
@@ -59,85 +68,100 @@ function menuPrompt() {
                     createNewScreen(answer.screenName);
                 });
                 break;
-            case 'Create Mobx Store':
-                createMobxStore();
-                break;
-            case 'Create Directory Structure':
-                createDirectoryStructure();
-                break;
-            case 'Setup Typescript':
-                setupTypescript();
-                break;
-            case 'Setup Storybook':
-                setupStorybook();
-                break;
-            case 'Create Scripts':
-                setupScripts();
+            case 'Post CRNA Config':
                 break;
             default:
                 break;
         }
     });
 }
+/**
+ * Creates a new component in the components directory.
+ *
+ * @param {any} componentName
+ */
 function createNewComponent(componentName) {
-    if (util.projectRoot !== null) {
-        _1.createComponent(componentName, false);
+    if (projectTools.projectRoot !== null) {
+        if (!pathExists(projectTools.projectRoot + '/src/components/' + componentName)) {
+            //I should probably add all kinds of validation here, but I won't.
+            componentName = componentName.slice(componentName.lastIndexOf('/') + 1);
+            componentName = componentName.charAt(0).toUpperCase() + componentName.slice(1);
+            let componentPath = projectTools.projectRoot + '/src/components/' + (componentName.substr(0, componentName.lastIndexOf('/') + 1) + componentName);
+            shelljs.mkdir('-p', componentPath);
+            componentTools.createComponentFile(componentName, componentPath, false);
+            componentTools.createComponentIndexFile(componentName, componentPath, false);
+            componentTools.createComponentPropsFile(componentName, componentPath);
+            componentTools.createComponentStateFile(componentName, componentPath);
+        }
+        else {
+            console.log('A component with that name already exists.');
+        }
     }
     else {
         notInProject();
     }
 }
+/**
+ * Creates a new stateless component.
+ *
+ * @param {any} componentName
+ */
 function createNewStatelessComponent(componentName) {
-    if (util.projectRoot !== null) {
-        _1.createComponent(componentName, true);
+    if (projectTools.projectRoot !== null) {
+        if (!pathExists(projectTools.projectRoot + '/src/components/' + componentName)) {
+            //I should probably add all kinds of validation here, but I won't.
+            componentName = componentName.slice(componentName.lastIndexOf('/') + 1);
+            componentName = componentName.charAt(0).toUpperCase() + componentName.slice(1);
+            let componentPath = projectTools.projectRoot + '/src/components/' + (componentName.substr(0, componentName.lastIndexOf('/') + 1) + componentName);
+            shelljs.mkdir('-p', componentPath);
+            componentTools.createComponentFile(componentName, componentPath, true);
+            componentTools.createComponentIndexFile(componentName, componentPath, true);
+            componentTools.createComponentPropsFile(componentName, componentPath);
+        }
+        else {
+            console.log('A component with that name already exists.');
+        }
     }
     else {
         notInProject();
     }
 }
+/**
+ * Creates a new component in the screens subdirectory.
+ *
+ * @param {any} screenName
+ */
 function createNewScreen(screenName) {
-    if (util.projectRoot !== null) {
-        _1.createScreen(screenName);
+    if (projectTools.projectRoot !== null) {
+        if (!pathExists(projectTools.projectRoot + '/src/screens/' + screenName)) {
+            //I should probably add all kinds of validation here, but I won't.
+            screenName = screenName.slice(screenName.lastIndexOf('/') + 1);
+            screenName = screenName.charAt(0).toUpperCase() + screenName.slice(1);
+            let componentPath = projectTools.projectRoot + '/src/screens/' + (screenName.substr(0, screenName.lastIndexOf('/') + 1) + screenName);
+            shelljs.mkdir('-p', componentPath);
+            componentTools.createComponentFile(screenName, componentPath, false);
+            componentTools.createComponentIndexFile(screenName, componentPath, false);
+            componentTools.createComponentPropsFile(screenName, componentPath);
+            componentTools.createComponentStateFile(screenName, componentPath);
+        }
+        else {
+            console.log('A component with that name already exists.');
+        }
     }
     else {
         notInProject();
     }
 }
-function createMobxStore() {
-    if (util.projectRoot !== null) {
-    }
-    else {
-        notInProject();
-    }
+/**
+ * Installs TypeScript, Mobx, and other dependencies.
+ * Configures VSCode for debugging CRNA apps.
+ * Configures app.json to use the react-native-typescript-transformer.
+ * Creates a standard project folder structure.
+ */
+function setupProject() {
 }
-function createDirectoryStructure() {
-    if (util.projectRoot !== null) {
-        util.createStructure();
-    }
-    else {
-        notInProject();
-    }
-}
-function setupTypescript() {
-    if (util.projectRoot !== null) {
-    }
-    else {
-        notInProject();
-    }
-}
-function setupStorybook() {
-    if (util.projectRoot !== null) {
-    }
-    else {
-        notInProject();
-    }
-}
-function setupScripts() {
-    if (util.projectRoot !== null) {
-    }
-    else {
-        notInProject();
-    }
+function pathExists(dir) {
+    return fs.existsSync(dir);
 }
 function notInProject() {
     console.log('You do not appear to be in a project. Please run rnutils from within your react native project.');

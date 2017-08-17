@@ -16,12 +16,6 @@ For now, clone the project and run `yarn tsc` from the project root to transpile
 
 ## Functions ##
 
-**Setup Typescript**
-
-*not yet implemeneted*
-
-This will add typescript and all necessary libraries to an application created with CRNA. It will configure the package.json and app.json files accordingly. 
-
 **Create Directory Structure**
 This option creates my standard directory structure: 
 
@@ -45,9 +39,6 @@ This option creates my standard directory structure:
 ```
 This should be run immediately after CRNA.
 
-**Setup Storybook**
-
-*not yet implemeneted*
 
 **Create Component**
 
@@ -80,12 +71,6 @@ This command will create a component at the `/screens/ScreenName` directory alon
 * index.ts
 
 The files will contain basic boilerplate and the index.ts will take care of exporting each file.
-
-**Create Mobx Store**
-
-*not yet implemeneted*
-
-This will add a basic store using mobx with minimal boilerplate 
 
 **Create Scripts**
 
