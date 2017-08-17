@@ -32,15 +32,11 @@
   "dependencies": {
     "chalk": "^2.1.0",
     "clear": "^0.0.1",
-    "clui": "^0.3.6",
     "copyfiles": "^1.2.0",
     "figlet": "^1.2.0",
     "handlebars": "^4.0.10",
     "inquirer": "^3.2.1",
-    "lodash": "^4.17.4",
-    "minimist": "^1.2.0",
     "pkg-up": "^2.0.0",
-    "preferences": "^0.2.1",
     "shelljs": "^0.7.8",
     "yarn-api": "^1.1.0"
   },
