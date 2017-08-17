@@ -1,9 +1,11 @@
 # React Native Utils #
 
-This is a simple command line utility to help create the basic patterns that I use when working on react native projects and initialize them with the `create-react-native-app` utility. I typically use the following tools and libraries:
+I found myself writing the same things over and over again, as we always do. I looked for a generator or some project scaffolding tools that would do what I wanted and as usual didn't find them. I probably could have put this in slush but I just wanted to get something done rather than learning yet another tool, even if it is simple. 
+
+`rnutils` is a command line utility to help create the basic patterns that I use when working on react native projects and initialize them with the `create-react-native-app` utility. I typically use the following tools and libraries:
 
 * TypeScript
-* StoryBook
+* StoryBook 
 * Jest
 * Mobx
 
@@ -11,10 +13,34 @@ This is intended for use with vscode, but most features should be editor indepen
 
 ## Installation ##
 
-**NOT YET PUBLISHED**
-For now, clone the project and run `yarn tsc` from the project root to transpile the typescript. You can run `npm install -g` from the project root to make this accessible globally while it is still in development.
+```bash
+yarn global add rnutils
+```
 
-## Functions ##
+## New Project ##
+
+To get started on a new typescript project:
+
+1. Run `create-react-native-app [projectName]` as you normally would.
+1. Navigate to your new project directory and run `rnutils`.
+1. Choose `Post CRNA Config` to setup a basic typescript/react native project. See the options below for more detail. 
+
+## Usage ##
+
+From your project directory:
+```
+rnutils 
+```
+
+## Options ##
+
+When running the `rnutils` you will have the following choices:
+
+* Create Component
+* Create Stateless Component
+* Create Screen
+* Post CRNA Config
+* Exit
 
 **Create Component**
 
@@ -25,7 +51,7 @@ This command will create a component at the `/components/ComponentName` director
 * IComponentState.ts
 * index.ts
 
-The files will contain basic boilerplate and the index.ts will take care of exporting each file.
+The files will contain basic boilerplate and the index.ts will take care of exporting each file. You can include subdirectories in the component name. The first letter of the component name will be capatilazed
 
 **Create Stateless Component** 
 
@@ -98,10 +124,10 @@ This option performs a series of tasks that are meant to be completed right afte
         ```
 
 
-***NOTE*** I am only testing on linux. Most of these options should work on windows as I'm using shelljs and fs for any file access. I'm happy to accept a PR (when I publish) to fix any windows bugs you may have found.
-
+***NOTE*** I am only testing on linux/ubuntu. Most of these options should work on windows as I'm using shelljs and fs for any file access. I'm happy to accept a PR (when I publish) to fix any windows bugs you may have found.
 
 ## Known Issues ## 
 
 * The inquirer UI does not provide feedback when something goes wrong.
+* I did not do any validation on user input. 
 
