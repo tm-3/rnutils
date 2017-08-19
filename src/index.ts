@@ -203,8 +203,10 @@ function createNewScreen(screenName: string) {
  * Creates a standard project folder structure.
  */
 function setupProject() {
-    projectTools.installDevDependencies();
-    projectTools.installDependencies();
+    projectTools.installDevDependencies().then(() => {
+        projectTools.installDependencies();
+    });
+    // projectTools.installDependencies();
     projectTools.createDevScripts();
     projectTools.createStructure();
     projectTools.createTsConfigJson();
