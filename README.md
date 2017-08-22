@@ -104,24 +104,23 @@ This option performs a series of tasks that are meant to be completed right afte
     * increaseWatches: Increases the number of inotify watches. This is reset on reboot. I should probably make this permanent on my machine instead of having the script here.
 * Creates my Standard Directory Structure:
 
-        ```
-        .
-        ├──__tests__
-        |  ├──components
-        |  ├──config
-        |  ├──navigation
-        |  ├──screens
-        |  ├──stores
-        |  └──util
-        └──src
-            ├──components
-            ├──config
-            ├──navigation
-            ├──screens
-            ├──stores
-            └──util
-
-        ```
+    ```
+    .
+    ├──__tests__
+    |  ├──components
+    |  ├──config
+    |  ├──navigation
+    |  ├──screens
+    |  ├──stores
+    |  └──util
+    └──src
+        ├──components
+        ├──config
+        ├──navigation
+        ├──screens
+        ├──stores
+        └──util
+    ```
 
 
 ***NOTE*** I am only testing on linux/ubuntu. Most of these options should work on windows as I'm using shelljs and fs for any file access. I'm happy to accept a PR (when I publish) to fix any windows bugs you may have found.
