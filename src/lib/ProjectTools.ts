@@ -1,11 +1,7 @@
-import * as yarn from 'yarn-api';
 import * as fs from 'fs';
 import * as shelljs from 'shelljs';
 import * as pkgUp from 'pkg-up';
-
-// import { Util } from './Util';
-// let util = new Util();
-
+import * as spawn from 'cross-spawn';
 
 export class ProjectTools { 
     constructor() {
@@ -13,6 +9,22 @@ export class ProjectTools {
     }
 
     projectRoot = null;
+    devPackages = [
+        'jest',
+        'typescript', 
+        'jest-expo-ts', 
+        'react-test-renderer@16.0.0-alpha.12',
+        'react-native-typescript-transformer',
+        '@types/react',
+        '@types/react-native',
+        '@types/react-test-renderer',
+        '@types/jest'
+    ]
+
+    packages = [
+        'mobx',
+        'mobx-react'
+    ]
 
     private getProjectRoot() {
         let pr: string =  pkgUp.sync(process.cwd());
@@ -24,45 +36,56 @@ export class ProjectTools {
         }
     }
 
-    /**
-     * Install as dev dependencies:
-     * 
-     * typescript
-     * jest-expo-ts
-     * react-test-renderer
-     * react-native-typescript-transformer
-     * @types/react
-     * @types/react-native
-     * @typesreact-test-renderer
-     * @types/jest
-     */
-    async installDevDependencies() {
-        let packages = [
-            'typescript', 
-            'jest-expo-ts', 
-            'react-test-renderer@16.0.0-alpha.12',
-            'react-native-typescript-transformer',
-            '@types/react',
-            '@types/react-native',
-            '@types/react-test-renderer',
-            '@types/jest'
-        ]
-        
-        yarn.devDependencies(packages, (err) => {
-            console.log(err);
-        })
-    }
+    installPackages() {
 
-    async installDependencies() {
-        let packages = [
-            'mobx',
-            'mobx-react'
-        ]
+        let cmd = null;
+        let devArgs = [];
+        let args = [];
 
-        yarn.dependencies(packages, (err) => {
-            console.log(err);
-        })
+        if(this.userHasYarn()) {
+            //Use Yarn
+            console.log('Using yarn to install packages...');
 
+            devArgs = ['add', '-D'];
+            args = ['add'];
+
+            args = args.concat(this.packages);
+            devArgs = devArgs.concat(this.devPackages);
+            cmd = 'yarnpkg';
+
+            console.log('args: ' + args);
+            console.log('devArgs: ' + devArgs);
+
+        }
+        else {
+            //Use NPM
+            console.log('Using NPM to install packages...');
+
+            devArgs = ['isntall', '-D'];
+            args = ['install'];
+
+            args = args.concat(this.packages);
+            devArgs = devArgs.concat(this.devPackages);
+            cmd = 'npm';
+
+            console.log('args: ' + args);
+            console.log('devArgs: ' + devArgs);
+            
+        }
+
+        try 
+        {
+
+            let devResult = spawn.sync(cmd, devArgs, { stdio: 'inherit' });
+            let result = spawn.sync(cmd, args, { stdio: 'inherit' });
+
+            console.log('devResult: ' + devResult);
+            console.log('result: ' + result);
+        }
+        catch(err)
+        {
+            console.log('err: ' + err);
+        }
     }
 
     /**
@@ -210,4 +233,17 @@ export class ProjectTools {
 
         fs.writeFileSync(this.projectRoot + '/.vscode/settings.json', JSON.stringify(settings, null, 4));
     }
+
+    private userHasYarn() {
+        try {
+          const result = spawn.sync('yarnpkg', ['--version'], { stdio: 'ignore' });
+          if (result.error || result.status !== 0) {
+            return false;
+          }
+          return true;
+        } catch (e) {
+          return false;
+        }
+    }
+
 }

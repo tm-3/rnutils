@@ -1,5 +1,13 @@
 #!/usr/bin/env node
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const fs = require("fs");
 const clear = require("clear");
@@ -27,7 +35,7 @@ function menuPrompt() {
                 'Create Stateless Component',
                 'Create Screen',
                 new inquirer.Separator(),
-                'Post CRNA Config',
+                'Post CRNA TypeScript Config',
                 new inquirer.Separator(),
                 'Exit',
                 new inquirer.Separator()
@@ -62,7 +70,7 @@ function menuPrompt() {
                     createNewScreen(answer.screenName);
                 }).then(() => { menuPrompt(); });
                 break;
-            case 'Post CRNA Config':
+            case 'Post CRNA TypeScript Config':
                 inquirer.prompt({
                     type: 'confirm',
                     name: 'confirm',
@@ -70,10 +78,10 @@ function menuPrompt() {
                     default: false
                 }).then((answer) => {
                     if (answer.confirm) {
-                        console.log(answer);
                         setupProject();
                     }
-                }).then(() => { menuPrompt(); });
+                });
+                // .then(() => { menuPrompt()});
                 break;
             default:
                 break;
@@ -164,15 +172,14 @@ function createNewScreen(screenName) {
  * Creates a standard project folder structure.
  */
 function setupProject() {
-    projectTools.installDevDependencies().then(() => {
-        projectTools.installDependencies();
+    return __awaiter(this, void 0, void 0, function* () {
+        yield projectTools.installPackages();
+        yield projectTools.createDevScripts();
+        yield projectTools.createStructure();
+        yield projectTools.createTsConfigJson();
+        yield projectTools.setupDebugging();
+        yield projectTools.modifyAppJson();
     });
-    // projectTools.installDependencies();
-    projectTools.createDevScripts();
-    projectTools.createStructure();
-    projectTools.createTsConfigJson();
-    projectTools.setupDebugging();
-    projectTools.modifyAppJson();
 }
 function pathExists(dir) {
     return fs.existsSync(dir);

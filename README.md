@@ -11,6 +11,8 @@ I found myself writing the same things over and over again, as we always do. I l
 
 This is intended for use with vscode, but most features should be editor independent. Setting up debugging will not work with any other editor. 
 
+Since I use typescript extensively, I have not included any options for generating files in JavaScript. If I get enough interest I'll add some options for use with JS as well. PR's are welcome.
+
 ## Installation ##
 
 ```bash
@@ -74,7 +76,7 @@ This command will create a component at the `/screens/ScreenName` directory alon
 
 The files will contain basic boilerplate and the index.ts will take care of exporting each file.
 
-**Post CRNA Config**
+**Post CRNA TypeScript Config**
 
 This option performs a series of tasks that are meant to be completed right after you run the `create-react-native-app`. They are:
 
@@ -123,10 +125,5 @@ This option performs a series of tasks that are meant to be completed right afte
     ```
 
 
-***NOTE*** I am only testing on linux/ubuntu. Most of these options should work on windows as I'm using shelljs and fs for any file access. I'm happy to accept a PR (when I publish) to fix any windows bugs you may have found.
-
-## Known Issues ## 
-
-* The inquirer UI does not provide feedback when something goes wrong.
-* I did not do any validation on user input. 
+***NOTE*** I am only testing on linux/ubuntu. Most of these options should work on windows as I'm using shelljs and fs for any file access. I'm happy to accept a PR to fix any windows bugs you may have found.
 

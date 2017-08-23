@@ -36,7 +36,7 @@ function menuPrompt() {
                 'Create Stateless Component',
                 'Create Screen',
                 new inquirer.Separator(),
-                'Post CRNA Config',
+                'Post CRNA TypeScript Config',
                 new inquirer.Separator(),
                 'Exit',
                 new inquirer.Separator()
@@ -76,7 +76,7 @@ function menuPrompt() {
                     createNewScreen(answer.screenName);
                 }).then(() => { menuPrompt()});
                 break;
-            case 'Post CRNA Config':
+            case 'Post CRNA TypeScript Config':
                 inquirer.prompt({
                     type: 'confirm',
                     name: 'confirm',
@@ -85,10 +85,10 @@ function menuPrompt() {
 
                 }).then((answer) => {
                     if(answer.confirm) {
-                        console.log(answer);
                         setupProject();
                     }
-                }).then(() => { menuPrompt()});
+                })
+                // .then(() => { menuPrompt()});
                 break;    
             default:
                 break;
@@ -202,16 +202,13 @@ function createNewScreen(screenName: string) {
  * Configures app.json to use the react-native-typescript-transformer.
  * Creates a standard project folder structure.
  */
-function setupProject() {
-    projectTools.installDevDependencies().then(() => {
-        projectTools.installDependencies();
-    });
-    // projectTools.installDependencies();
-    projectTools.createDevScripts();
-    projectTools.createStructure();
-    projectTools.createTsConfigJson();
-    projectTools.setupDebugging();
-    projectTools.modifyAppJson();
+async function setupProject() {
+    await projectTools.installPackages();
+    await projectTools.createDevScripts();
+    await projectTools.createStructure();
+    await projectTools.createTsConfigJson();
+    await projectTools.setupDebugging();
+    await projectTools.modifyAppJson();
 }
 
 
