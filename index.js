@@ -19,8 +19,8 @@ const _1 = require("./lib/");
 let componentTools = new _1.ComponentTools();
 let projectTools = new _1.ProjectTools();
 let ui = new inquirer.ui.BottomBar();
+clear();
 function menuPrompt() {
-    clear();
     console.log(chalk.green(figlet.textSync('rnutils', {
         horizontalLayout: 'default',
         verticalLayout: 'default'
@@ -173,18 +173,26 @@ function createNewScreen(screenName) {
  */
 function setupProject() {
     return __awaiter(this, void 0, void 0, function* () {
-        yield projectTools.installPackages();
-        yield projectTools.createDevScripts();
-        yield projectTools.createStructure();
-        yield projectTools.createTsConfigJson();
-        yield projectTools.setupDebugging();
-        yield projectTools.modifyAppJson();
+        try {
+            yield projectTools.installPackages();
+            yield projectTools.createDevScripts();
+            yield projectTools.createStructure();
+            yield projectTools.createTsConfigJson();
+            yield projectTools.setupDebugging();
+            yield projectTools.modifyAppJson();
+            yield projectTools.addStorybook();
+            return 'done';
+        }
+        catch (err) {
+            return err;
+        }
     });
 }
 function pathExists(dir) {
     return fs.existsSync(dir);
 }
 function notInProject() {
+    //not working. Need to learn inquirer.
     ui.updateBottomBar('You do not appear to be in a project. Please run rnutils from within your react native project.');
 }
 menuPrompt();

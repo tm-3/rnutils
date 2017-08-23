@@ -123,7 +123,7 @@ This option performs a series of tasks that are meant to be completed right afte
         ├──stores
         └──util
     ```
-
+* Runs `getstorybook`. Tests to see if a user has @storybook/cli installed. See the [storybook quick start guide](https://storybook.js.org/basics/quick-start-guide/) for more info.
 
 ***NOTE*** I am only testing on linux/ubuntu. Most of these options should work on windows as I'm using shelljs and fs for any file access. I'm happy to accept a PR to fix any windows bugs you may have found.
 

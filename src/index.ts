@@ -13,10 +13,9 @@ let componentTools = new ComponentTools();
 let projectTools = new ProjectTools();
 let ui = new inquirer.ui.BottomBar();
 
-
+clear();
 
 function menuPrompt() {
-    clear();
     console.log(
         chalk.green(
             figlet.textSync('rnutils', {
@@ -45,7 +44,6 @@ function menuPrompt() {
     ]).then((answers) => {
         switch (answers.options) {
             case 'Create Component':
-                    
                 inquirer.prompt({
                     type: 'input',
                     name: 'componentName',
@@ -203,12 +201,20 @@ function createNewScreen(screenName: string) {
  * Creates a standard project folder structure.
  */
 async function setupProject() {
-    await projectTools.installPackages();
-    await projectTools.createDevScripts();
-    await projectTools.createStructure();
-    await projectTools.createTsConfigJson();
-    await projectTools.setupDebugging();
-    await projectTools.modifyAppJson();
+
+    try {
+        await projectTools.installPackages();
+        await projectTools.createDevScripts();
+        await projectTools.createStructure();
+        await projectTools.createTsConfigJson();
+        await projectTools.setupDebugging();
+        await projectTools.modifyAppJson();
+        await projectTools.addStorybook();
+        return 'done';
+    }
+    catch (err) {
+        return err;
+    }
 }
 
 
@@ -217,6 +223,7 @@ function pathExists(dir: string) {
 }
 
 function notInProject() {
+    //not working. Need to learn inquirer.
     ui.updateBottomBar('You do not appear to be in a project. Please run rnutils from within your react native project.')
 }
 
