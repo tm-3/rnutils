@@ -36,6 +36,7 @@ function menuPrompt() {
                 'Create Screen',
                 new inquirer.Separator(),
                 'Post CRNA TypeScript Config',
+                'Post react-native TypeScript Config',
                 new inquirer.Separator(),
                 'Exit',
                 new inquirer.Separator()
@@ -82,6 +83,18 @@ function menuPrompt() {
                     }
                 });
                 // .then(() => { menuPrompt()});
+                break;
+            case 'Post react-native TypeScript Config':
+                inquirer.prompt({
+                    type: 'confirm',
+                    name: 'confirm',
+                    message: 'This will setup a default directory structure, install typescript, mobx, and other related @types as well as make some configuration changes. Are you sure you want to proceed?',
+                    default: false
+                }).then((answer) => {
+                    if (answer.confirm) {
+                        // setupProject();
+                    }
+                });
                 break;
             default:
                 break;

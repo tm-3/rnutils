@@ -21,6 +21,16 @@ export class ProjectTools {
         '@types/jest'
     ]
 
+    devRnPackages = [
+        'typescript', 
+        'react-test-renderer@16.0.0-alpha.12',
+        'react-native-typescript-transformer',
+        '@types/react',
+        '@types/react-native',
+        '@types/react-test-renderer',
+        '@types/jest'
+    ]
+
     packages = [
         'mobx',
         'mobx-react'
@@ -36,7 +46,7 @@ export class ProjectTools {
         }
     }
 
-    installPackages() {
+    installPackages(isCrna) {
 
         let cmd = null;
         let devArgs = [];
@@ -50,7 +60,7 @@ export class ProjectTools {
             args = ['add'];
 
             args = args.concat(this.packages);
-            devArgs = devArgs.concat(this.devPackages);
+            devArgs = isCrna ? devArgs.concat(this.devPackages) : devArgs.concat(this.devRnPackages);
             cmd = 'yarnpkg';
         }
         else {
@@ -61,7 +71,7 @@ export class ProjectTools {
             args = ['install'];
 
             args = args.concat(this.packages);
-            devArgs = devArgs.concat(this.devPackages);
+            devArgs = isCrna ? devArgs.concat(this.devPackages) : devArgs.concat(this.devRnPackages);
             cmd = 'npm';            
         }
 
@@ -104,29 +114,64 @@ export class ProjectTools {
             return err;
         }
     }
+    
+    async createRnCliConfig() {
+        try 
+        {
+            let cliConfig = 
+            `module.exports = {
+                getTransformModulePath() {
+                  return require.resolve('react-native-typescript-transformer')
+                },
+                getSourceExts() {
+                  return ['ts', 'tsx'];
+                }
+            }`;
+
+            fs.writeFileSync(this.projectRoot + '/rn-cli.config.js', cliConfig);
+            return 'done';
+        }
+        catch (err)
+        {
+            console.log(err);
+            return err;
+        }
+    }
 
     /**
      * Modify Scripts
      */
-    async createDevScripts() {
+    async createDevScripts(isCRNA) {
         try
         {
-
-
             let packageJson = JSON.parse(fs.readFileSync(this.projectRoot + '/package.json').toString());
 
-            packageJson.scripts = {
-                "prestart": "yarn cleanWatchman",
-                "start": "react-native-scripts start",
-                "eject": "react-native-scripts eject",
-                "android": "react-native-scripts android",
-                "ios": "react-native-scripts ios",
-                "test": "node node_modules/jest/bin/jest.js --watch",
-                "cleanWatchman": "watchman watch-del-all",
-                "startEmulator": "~/Android/Sdk/tools/emulator -avd Pixel_XL_API_26 &",
-                "preandroid": "yarn cleanWatchman & yarn startEmulator &",
-                "increaseWatches": "sudo sysctl -w fs.inotify.max_user_watches=10000"
-              }
+            if (isCRNA) {
+                packageJson.scripts = {
+                    "prestart": "yarn cleanWatchman",
+                    "start": "react-native-scripts start",
+                    "eject": "react-native-scripts eject",
+                    "android": "react-native-scripts android",
+                    "ios": "react-native-scripts ios",
+                    "test": "node node_modules/jest/bin/jest.js --watch",
+                    "cleanWatchman": "watchman watch-del-all",
+                    "startEmulator": "~/Android/Sdk/tools/emulator -avd Pixel_XL_API_26 &",
+                    "preandroid": "yarn cleanWatchman & yarn startEmulator &",
+                    "increaseWatches": "sudo sysctl -w fs.inotify.max_user_watches=10000"
+                }
+            }
+            else {
+                packageJson.scripts = {
+                    "start": "react-native start",
+                    "startEmulator": "~/Android/Sdk/tools/emulator -avd Pixel_XL_API_26 &",
+                    "preandroid": "",
+                    "android": "react-native run-android",
+                    "ios": "react-native run-ios",
+                    "test": "node node_modules/jest/bin/jest.js --watch",
+                    "increaseWatches": "sudo sysctl -w fs.inotify.max_user_watches=10000",
+                    "cleanWatchman": "watchman watch-del-all"
+                }
+            }
 
             fs.writeFileSync(this.projectRoot + '/package.json', JSON.stringify(packageJson, null, 2));
 

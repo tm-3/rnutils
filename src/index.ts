@@ -36,6 +36,7 @@ function menuPrompt() {
                 'Create Screen',
                 new inquirer.Separator(),
                 'Post CRNA TypeScript Config',
+                'Post react-native TypeScript Config',
                 new inquirer.Separator(),
                 'Exit',
                 new inquirer.Separator()
@@ -83,11 +84,24 @@ function menuPrompt() {
 
                 }).then((answer) => {
                     if(answer.confirm) {
-                        setupProject();
+                        setupCrnaProject();
                     }
                 })
                 // .then(() => { menuPrompt()});
                 break;    
+            case 'Post react-native TypeScript Config':
+                inquirer.prompt({
+                    type: 'confirm',
+                    name: 'confirm',
+                    message: 'This will setup a default directory structure, install typescript, mobx, and other related @types as well as make some configuration changes. Are you sure you want to proceed?',
+                    default: false
+
+                }).then((answer) => {
+                    if(answer.confirm) {
+                        setupRnProject();
+                    }
+                })
+                break;
             default:
                 break;
         }
@@ -200,15 +214,33 @@ function createNewScreen(screenName: string) {
  * Configures app.json to use the react-native-typescript-transformer.
  * Creates a standard project folder structure.
  */
-async function setupProject() {
+async function setupCrnaProject() {
 
     try {
-        await projectTools.installPackages();
-        await projectTools.createDevScripts();
+        await projectTools.installPackages(true);
+        await projectTools.createDevScripts(true);
         await projectTools.createStructure();
         await projectTools.createTsConfigJson();
         await projectTools.setupDebugging();
         await projectTools.modifyAppJson();
+        await projectTools.addStorybook();
+        return 'done';
+    }
+    catch (err) {
+        return err;
+    }
+}
+
+async function setupRnProject() {
+
+    try {
+        await projectTools.installPackages(false);
+        await projectTools.createDevScripts(false);
+        await projectTools.createStructure();
+        await projectTools.createTsConfigJson();
+        await projectTools.createRnCliConfig();
+        // await projectTools.setupDebugging();
+        // await projectTools.modifyAppJson();
         await projectTools.addStorybook();
         return 'done';
     }
