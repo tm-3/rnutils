@@ -85,12 +85,12 @@ export class ComponentTools {
     }
 
 
-    createComponentIndexFile(componentName: string, componentPath: string, isStateless: boolean) {
+    createComponentIndexFile(componentName: string, componentPath: string) {
         try
         {
             
             let template = handlebars.templates['ComponentIndex'];
-            let context = {componentName: componentName, isStateless: isStateless};
+            let context = {componentName: componentName};
 
             let file = template(context);
 

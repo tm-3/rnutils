@@ -127,7 +127,7 @@ function createNewComponent(componentName) {
             shelljs.mkdir('-p', componentPath);
     
             componentTools.createComponentFile(componentName, componentPath, false);
-            componentTools.createComponentIndexFile(componentName, componentPath, false);
+            componentTools.createComponentIndexFile(componentName, componentPath);
             componentTools.createComponentPropsFile(componentName, componentPath);           
             componentTools.createComponentStateFile(componentName, componentPath);
 
@@ -161,7 +161,7 @@ function createNewStatelessComponent(componentName) {
             shelljs.mkdir('-p', componentPath);
     
             componentTools.createComponentFile(componentName, componentPath, true);
-            componentTools.createComponentIndexFile(componentName, componentPath, true);
+            componentTools.createComponentIndexFile(componentName, componentPath);
             componentTools.createComponentPropsFile(componentName, componentPath);   
         }
         else {
@@ -193,7 +193,7 @@ function createNewScreen(screenName: string) {
             shelljs.mkdir('-p', componentPath);
     
             componentTools.createComponentFile(screenName, componentPath, false);
-            componentTools.createComponentIndexFile(screenName, componentPath, false);
+            componentTools.createComponentIndexFile(screenName, componentPath);
             componentTools.createComponentPropsFile(screenName, componentPath);           
             componentTools.createComponentStateFile(screenName, componentPath);
 
