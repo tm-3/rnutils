@@ -29,6 +29,7 @@ export class ProjectTools {
         'typescript',
         'ts-jest',
         'react-native-typescript-transformer',
+        'babel-preset-es2015',
         '@types/react',
         '@types/react-native',
         '@types/react-test-renderer',
@@ -143,15 +144,16 @@ export class ProjectTools {
     async createRnCliConfig() {
         try 
         {
+            //My laziness abounds. I should just figure out how to do template strings the right way.
             let cliConfig = 
-            `module.exports = {
-                getTransformModulePath() {
-                  return require.resolve('react-native-typescript-transformer')
-                },
-                getSourceExts() {
-                  return ['ts', 'tsx'];
-                }
-            }`;
+`module.exports = {
+    getTransformModulePath() {
+        return require.resolve('react-native-typescript-transformer')
+    },
+    getSourceExts() {
+        return ['ts', 'tsx'];
+    }
+}`;
 
             fs.writeFileSync(this.projectRoot + '/rn-cli.config.js', cliConfig);
             return 'done';
@@ -332,7 +334,6 @@ AppRegistry.registerComponent('haiumobile', () => App);
             }
             else
             {
-    
                 console.log('Please run rnutils from within your react native project.');
             }
         }
@@ -444,6 +445,18 @@ AppRegistry.registerComponent('haiumobile', () => App);
             return err;
         }
     }
+
+    /**
+     * Creates the /src/index.tsx file.
+     */
+    async createAppTsx() {
+        //Create the file as a class
+        //Be sure index.ios.js and index.android.js import this file
+        //
+
+        //Create mobx rootstore
+    }
+
 
     private userHasStorybook() {
         try {

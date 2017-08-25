@@ -244,7 +244,7 @@ async function setupRnProject() {
         await projectTools.addStorybook();
         //Setup testing
         //Setup app container
-        await projectTools.createLocalProperties();
+        // await projectTools.createLocalProperties();
         return 'done';
     }
     catch (err) {
