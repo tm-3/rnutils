@@ -13,9 +13,8 @@ let componentTools = new ComponentTools();
 let projectTools = new ProjectTools();
 let ui = new inquirer.ui.BottomBar();
 
-clear();
-
 function menuPrompt() {
+    clear();
     console.log(
         chalk.green(
             figlet.textSync('rnutils', {
@@ -218,10 +217,10 @@ async function setupCrnaProject() {
 
     try {
         await projectTools.installPackages(true);
-        await projectTools.createDevScripts(true);
+        await projectTools.modifyPackageJson(true);
         await projectTools.createStructure();
         await projectTools.createTsConfigJson();
-        await projectTools.setupDebugging();
+        await projectTools.setupDebugging(true);
         await projectTools.modifyAppJson();
         await projectTools.addStorybook();
         return 'done';
@@ -235,13 +234,17 @@ async function setupRnProject() {
 
     try {
         await projectTools.installPackages(false);
-        await projectTools.createDevScripts(false);
+        await projectTools.modifyPackageJson(false);
         await projectTools.createStructure();
         await projectTools.createTsConfigJson();
         await projectTools.createRnCliConfig();
-        // await projectTools.setupDebugging();
-        // await projectTools.modifyAppJson();
+        await projectTools.createBablercFile();
+        await projectTools.createEntryFiles();
+        await projectTools.setupDebugging(false);
         await projectTools.addStorybook();
+        //Setup testing
+        //Setup app container
+        await projectTools.createLocalProperties();
         return 'done';
     }
     catch (err) {

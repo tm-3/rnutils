@@ -19,8 +19,8 @@ const _1 = require("./lib/");
 let componentTools = new _1.ComponentTools();
 let projectTools = new _1.ProjectTools();
 let ui = new inquirer.ui.BottomBar();
-clear();
 function menuPrompt() {
+    clear();
     console.log(chalk.green(figlet.textSync('rnutils', {
         horizontalLayout: 'default',
         verticalLayout: 'default'
@@ -79,7 +79,7 @@ function menuPrompt() {
                     default: false
                 }).then((answer) => {
                     if (answer.confirm) {
-                        setupProject();
+                        setupCrnaProject();
                     }
                 });
                 // .then(() => { menuPrompt()});
@@ -92,7 +92,7 @@ function menuPrompt() {
                     default: false
                 }).then((answer) => {
                     if (answer.confirm) {
-                        // setupProject();
+                        setupRnProject();
                     }
                 });
                 break;
@@ -115,7 +115,7 @@ function createNewComponent(componentName) {
             let componentPath = projectTools.projectRoot + '/src/components/' + (componentName.substr(0, componentName.lastIndexOf('/') + 1) + componentName);
             shelljs.mkdir('-p', componentPath);
             componentTools.createComponentFile(componentName, componentPath, false);
-            componentTools.createComponentIndexFile(componentName, componentPath, false);
+            componentTools.createComponentIndexFile(componentName, componentPath);
             componentTools.createComponentPropsFile(componentName, componentPath);
             componentTools.createComponentStateFile(componentName, componentPath);
         }
@@ -141,7 +141,7 @@ function createNewStatelessComponent(componentName) {
             let componentPath = projectTools.projectRoot + '/src/components/' + (componentName.substr(0, componentName.lastIndexOf('/') + 1) + componentName);
             shelljs.mkdir('-p', componentPath);
             componentTools.createComponentFile(componentName, componentPath, true);
-            componentTools.createComponentIndexFile(componentName, componentPath, true);
+            componentTools.createComponentIndexFile(componentName, componentPath);
             componentTools.createComponentPropsFile(componentName, componentPath);
         }
         else {
@@ -166,7 +166,7 @@ function createNewScreen(screenName) {
             let componentPath = projectTools.projectRoot + '/src/screens/' + (screenName.substr(0, screenName.lastIndexOf('/') + 1) + screenName);
             shelljs.mkdir('-p', componentPath);
             componentTools.createComponentFile(screenName, componentPath, false);
-            componentTools.createComponentIndexFile(screenName, componentPath, false);
+            componentTools.createComponentIndexFile(screenName, componentPath);
             componentTools.createComponentPropsFile(screenName, componentPath);
             componentTools.createComponentStateFile(screenName, componentPath);
         }
@@ -184,16 +184,38 @@ function createNewScreen(screenName) {
  * Configures app.json to use the react-native-typescript-transformer.
  * Creates a standard project folder structure.
  */
-function setupProject() {
+function setupCrnaProject() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            yield projectTools.installPackages();
-            yield projectTools.createDevScripts();
+            yield projectTools.installPackages(true);
+            yield projectTools.modifyPackageJson(true);
             yield projectTools.createStructure();
             yield projectTools.createTsConfigJson();
-            yield projectTools.setupDebugging();
+            yield projectTools.setupDebugging(true);
             yield projectTools.modifyAppJson();
             yield projectTools.addStorybook();
+            return 'done';
+        }
+        catch (err) {
+            return err;
+        }
+    });
+}
+function setupRnProject() {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            yield projectTools.installPackages(false);
+            yield projectTools.modifyPackageJson(false);
+            yield projectTools.createStructure();
+            yield projectTools.createTsConfigJson();
+            yield projectTools.createRnCliConfig();
+            yield projectTools.createBablercFile();
+            yield projectTools.createEntryFiles();
+            yield projectTools.setupDebugging(false);
+            yield projectTools.addStorybook();
+            //Setup testing
+            //Setup app container
+            yield projectTools.createLocalProperties();
             return 'done';
         }
         catch (err) {
