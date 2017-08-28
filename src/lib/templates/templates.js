@@ -1,4 +1,10 @@
 var Handlebars = require("handlebars");  var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
+templates['AppTsx'] = template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
+    return "import React from 'react';\nimport { StyleSheet, View, Text } from 'react-native';\n\nimport { observable } from 'mobx';\nimport { observer } from 'mobx-react';\n\ninterface IAppProps {\n    rootStore?: object;   \n}\n    \ninterface IAppState {\n\n}\n\n@observer\nexport class App extends React.Component<IAppProps, IAppState> {\n    render() {\n        return (\n            <View  style={styles.appContainer}>\n                <Text>Replace me with your app.</Text>\n            </View>\n        )\n    }\n}\n\n\nconst styles = StyleSheet.create({\n    appContainer: {\n        flex: 1,\n        justifyContent: 'center',\n        alignItems: 'center',\n        alignContent: 'center'\n    }\n})";
+},"useData":true});
+templates['BasicTest'] = template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
+    return "import 'react-native';\nimport React from 'react';\nimport { App } from '../src/';\n\nimport renderer from 'react-test-renderer';\n\nit('renders correctly', () => {\n  const rendered = renderer.create(\n    <App />\n  );\n  expect(rendered).toMatchSnapshot();\n});";
+},"useData":true});
 templates['Component'] = template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
     var helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
 
@@ -14,21 +20,21 @@ templates['Component'] = template({"compiler":[7,">= 4.0.0"],"main":function(con
     + alias4(((helper = (helper = helpers.componentName || (depth0 != null ? depth0.componentName : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"componentName","hash":{},"data":data}) : helper)))
     + "State> {\n\n    render() {\n        return(\n            <View></View>\n        )\n    }\n}";
 },"useData":true});
-templates['ComponentIndex'] = template({"1":function(container,depth0,helpers,partials,data) {
+templates['ComponentIndex'] = template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
     var helper;
 
-  return "export * from './I"
+  return "export * from './"
     + container.escapeExpression(((helper = (helper = helpers.componentName || (depth0 != null ? depth0.componentName : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"componentName","hash":{},"data":data}) : helper)))
-    + "State';\n";
-},"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
-    var stack1, helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
-
-  return ((stack1 = helpers.unless.call(alias1,(depth0 != null ? depth0.isStateless : depth0),{"name":"unless","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + "export * from './I"
-    + alias4(((helper = (helper = helpers.componentName || (depth0 != null ? depth0.componentName : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"componentName","hash":{},"data":data}) : helper)))
-    + "Props';\nexport * from './"
-    + alias4(((helper = (helper = helpers.componentName || (depth0 != null ? depth0.componentName : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"componentName","hash":{},"data":data}) : helper)))
     + "';";
+},"useData":true});
+templates['EntryPoint'] = template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
+    var helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
+
+  return "import { AppRegistry } from 'react-native';\nimport { App } from './src';\nimport StorybookUI from './storybook';\n\nvar storybook = true;\n\nstorybook ? \nAppRegistry.registerComponent('"
+    + alias4(((helper = (helper = helpers.projectName || (depth0 != null ? depth0.projectName : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"projectName","hash":{},"data":data}) : helper)))
+    + "', () => StorybookUI) :\nAppRegistry.registerComponent('"
+    + alias4(((helper = (helper = helpers.projectName || (depth0 != null ? depth0.projectName : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"projectName","hash":{},"data":data}) : helper)))
+    + "', () => App);";
 },"useData":true});
 templates['IComponentProps'] = template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
     var helper;
@@ -43,6 +49,9 @@ templates['IComponentState'] = template({"compiler":[7,">= 4.0.0"],"main":functi
   return "export interface I"
     + container.escapeExpression(((helper = (helper = helpers.componentName || (depth0 != null ? depth0.componentName : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"componentName","hash":{},"data":data}) : helper)))
     + "State {\n\n}";
+},"useData":true});
+templates['RnCliConfig'] = template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
+    return "module.exports = {\n    getTransformModulePath() {\n        return require.resolve('react-native-typescript-transformer');\n    },\n    getSourceExts() {\n        return [ 'ts', 'tsx' ]\n    }\n};";
 },"useData":true});
 templates['StatelessComponent'] = template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
     var helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;

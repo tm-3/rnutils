@@ -1,11 +1,11 @@
 {
   "name": "rnutils",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "description": "Command line utilities for creating common react native patterns.",
   "main": "index.ts",
   "scripts": {
     "test": "jest",
-    "pretsc": "yarn compileHandlebars",
+    "pretsc": "yarn compileHandlebars & rm -rf ./lib",
     "tsc": "./node_modules/typescript/bin/tsc & ./node_modules/copyfiles/copyfiles -f ./src/lib/templates/** ./lib/templates",
     "compileHandlebars": "./node_modules/handlebars/bin/handlebars ./src/lib/templates/ -f ./src/lib/templates/templates.js --commonjs=handlebars"
   },

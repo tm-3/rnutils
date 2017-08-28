@@ -13,9 +13,8 @@ let componentTools = new ComponentTools();
 let projectTools = new ProjectTools();
 let ui = new inquirer.ui.BottomBar();
 
-clear();
-
 function menuPrompt() {
+    clear();
     console.log(
         chalk.green(
             figlet.textSync('rnutils', {
@@ -36,6 +35,7 @@ function menuPrompt() {
                 'Create Screen',
                 new inquirer.Separator(),
                 'Post CRNA TypeScript Config',
+                'Post react-native TypeScript Config',
                 new inquirer.Separator(),
                 'Exit',
                 new inquirer.Separator()
@@ -83,11 +83,24 @@ function menuPrompt() {
 
                 }).then((answer) => {
                     if(answer.confirm) {
-                        setupProject();
+                        setupCrnaProject();
                     }
                 })
                 // .then(() => { menuPrompt()});
                 break;    
+            case 'Post react-native TypeScript Config':
+                inquirer.prompt({
+                    type: 'confirm',
+                    name: 'confirm',
+                    message: 'This will setup a default directory structure, install typescript, mobx, and other related @types as well as make some configuration changes. Are you sure you want to proceed?',
+                    default: false
+
+                }).then((answer) => {
+                    if(answer.confirm) {
+                        setupRnProject();
+                    }
+                })
+                break;
             default:
                 break;
         }
@@ -113,7 +126,7 @@ function createNewComponent(componentName) {
             shelljs.mkdir('-p', componentPath);
     
             componentTools.createComponentFile(componentName, componentPath, false);
-            componentTools.createComponentIndexFile(componentName, componentPath, false);
+            componentTools.createComponentIndexFile(componentName, componentPath);
             componentTools.createComponentPropsFile(componentName, componentPath);           
             componentTools.createComponentStateFile(componentName, componentPath);
 
@@ -147,7 +160,7 @@ function createNewStatelessComponent(componentName) {
             shelljs.mkdir('-p', componentPath);
     
             componentTools.createComponentFile(componentName, componentPath, true);
-            componentTools.createComponentIndexFile(componentName, componentPath, true);
+            componentTools.createComponentIndexFile(componentName, componentPath);
             componentTools.createComponentPropsFile(componentName, componentPath);   
         }
         else {
@@ -179,7 +192,7 @@ function createNewScreen(screenName: string) {
             shelljs.mkdir('-p', componentPath);
     
             componentTools.createComponentFile(screenName, componentPath, false);
-            componentTools.createComponentIndexFile(screenName, componentPath, false);
+            componentTools.createComponentIndexFile(screenName, componentPath);
             componentTools.createComponentPropsFile(screenName, componentPath);           
             componentTools.createComponentStateFile(screenName, componentPath);
 
@@ -200,17 +213,51 @@ function createNewScreen(screenName: string) {
  * Configures app.json to use the react-native-typescript-transformer.
  * Creates a standard project folder structure.
  */
-async function setupProject() {
+async function setupCrnaProject() {
 
     try {
-        await projectTools.installPackages();
-        await projectTools.createDevScripts();
-        await projectTools.createStructure();
-        await projectTools.createTsConfigJson();
-        await projectTools.setupDebugging();
-        await projectTools.modifyAppJson();
-        await projectTools.addStorybook();
-        return 'done';
+        if(projectTools.projectRoot !== null) {
+            await projectTools.installPackages(true);
+            await projectTools.modifyPackageJson(true);
+            await projectTools.createStructure();
+            await projectTools.createTsConfigJson();
+            await projectTools.setupDebugging(true);
+            await projectTools.modifyAppJson();
+            await projectTools.addStorybook();
+            return 'done';
+        }
+        else {
+            notInProject();
+        }
+    }
+    catch (err) {
+        return err;
+    }
+}
+
+async function setupRnProject() {
+
+    try {
+        if(projectTools.projectRoot !== null) {
+            await projectTools.installPackages(false);
+            await projectTools.modifyPackageJson(false);
+            await projectTools.createStructure();
+            await projectTools.createTsConfigJson();
+            await projectTools.createRnCliConfig();
+            await projectTools.createBablercFile();
+            await projectTools.createEntryFiles();
+            await projectTools.setupDebugging(false);
+            await projectTools.addStorybook();
+            await projectTools.createBasicApp();
+            await projectTools.setupTests();
+            //Setup testing
+            //Setup app container
+            // await projectTools.createLocalProperties(); 
+            return 'done';
+        }
+        else {
+            notInProject();
+        }
     }
     catch (err) {
         return err;
@@ -224,7 +271,8 @@ function pathExists(dir: string) {
 
 function notInProject() {
     //not working. Need to learn inquirer.
-    ui.updateBottomBar('You do not appear to be in a project. Please run rnutils from within your react native project.')
+    ui.updateBottomBar('You do not appear to be in a project. Please run rnutils from within your react native project.');
+    
 }
 
 menuPrompt()

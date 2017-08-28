@@ -2,6 +2,8 @@ import * as fs from 'fs';
 import * as shelljs from 'shelljs';
 import * as pkgUp from 'pkg-up';
 import * as spawn from 'cross-spawn';
+import * as handlebars from 'handlebars';
+var hbt = require('../lib/templates/templates.js');
 
 export class ProjectTools { 
     constructor() {
@@ -9,6 +11,9 @@ export class ProjectTools {
     }
 
     projectRoot = null;
+
+    // Note that @storybook/react-native should be installed with 'getstorybook' but there seems to be a bug in the CLI.
+
     devPackages = [
         'jest',
         'typescript', 
@@ -18,7 +23,20 @@ export class ProjectTools {
         '@types/react',
         '@types/react-native',
         '@types/react-test-renderer',
-        '@types/jest'
+        '@types/jest',
+        '@storybook/react-native'
+    ]
+
+    devRnPackages = [
+        'typescript',
+        'ts-jest',
+        'react-native-typescript-transformer',
+        'babel-preset-es2015',
+        '@types/react',
+        '@types/react-native',
+        '@types/react-test-renderer',
+        '@types/jest',
+        '@storybook/react-native'
     ]
 
     packages = [
@@ -36,7 +54,9 @@ export class ProjectTools {
         }
     }
 
-    installPackages() {
+
+
+    async installPackages(isCrna) {
 
         let cmd = null;
         let devArgs = [];
@@ -50,7 +70,7 @@ export class ProjectTools {
             args = ['add'];
 
             args = args.concat(this.packages);
-            devArgs = devArgs.concat(this.devPackages);
+            devArgs = isCrna ? devArgs.concat(this.devPackages) : devArgs.concat(this.devRnPackages);
             cmd = 'yarnpkg';
         }
         else {
@@ -61,7 +81,7 @@ export class ProjectTools {
             args = ['install'];
 
             args = args.concat(this.packages);
-            devArgs = devArgs.concat(this.devPackages);
+            devArgs = isCrna ? devArgs.concat(this.devPackages) : devArgs.concat(this.devRnPackages);
             cmd = 'npm';            
         }
 
@@ -105,28 +125,112 @@ export class ProjectTools {
         }
     }
 
-    /**
-     * Modify Scripts
-     */
-    async createDevScripts() {
+    async createBablercFile() {
         try
         {
+            let babel = {
+                "presets": ["react-native"],
+                "sourceMaps": "inline"
+            }
+
+            fs.writeFileSync(this.projectRoot + '/.babelrc', JSON.stringify(babel, null, 2));
+               
+            return 'done';
+        }
+        catch (err) 
+        {
+            return err;
+        }
+    }
+    
+    async createRnCliConfig() {
+        try 
+        {
+            
+            let cliConfigTemplate = handlebars.templates['RnCliConfig'];
+            let cliConfig = cliConfigTemplate({});
+
+            fs.writeFileSync(this.projectRoot + '/rn-cli.config.js', cliConfig);
+            return 'done';
+        }
+        catch (err)
+        {
+            console.log(err);
+            return err;
+        }
+    }
+    
+    async setupTests() {
+
+        try
+        { 
+            let basicTest = handlebars.templates['BasicTest'];
+            let template = basicTest({});
+
+            fs.writeFileSync(this.projectRoot + '/__tests__/index.unit.tests.js', template);
+
+            fs.unlinkSync(this.projectRoot + '/__tests__/index.ios.js');
+            fs.unlinkSync(this.projectRoot + '/__tests__/index.android.js');
+        
+        }
+        catch (err)
+        {
+            return err;
+        }
 
 
+    }
+
+    /**
+     * Modify Package.json
+     */
+    async modifyPackageJson(isCRNA) {
+        try
+        {
             let packageJson = JSON.parse(fs.readFileSync(this.projectRoot + '/package.json').toString());
 
-            packageJson.scripts = {
-                "prestart": "yarn cleanWatchman",
-                "start": "react-native-scripts start",
-                "eject": "react-native-scripts eject",
-                "android": "react-native-scripts android",
-                "ios": "react-native-scripts ios",
-                "test": "node node_modules/jest/bin/jest.js --watch",
-                "cleanWatchman": "watchman watch-del-all",
-                "startEmulator": "~/Android/Sdk/tools/emulator -avd Pixel_XL_API_26 &",
-                "preandroid": "yarn cleanWatchman & yarn startEmulator &",
-                "increaseWatches": "sudo sysctl -w fs.inotify.max_user_watches=10000"
-              }
+            if (isCRNA) {
+                packageJson.scripts = {
+                    "prestart": "yarn cleanWatchman",
+                    "start": "react-native-scripts start",
+                    "eject": "react-native-scripts eject",
+                    "android": "react-native-scripts android",
+                    "ios": "react-native-scripts ios",
+                    "test": "node node_modules/jest/bin/jest.js --watch",
+                    "cleanWatchman": "watchman watch-del-all",
+                    "startEmulator": "~/Android/Sdk/tools/emulator -avd Pixel_XL_API_26 &",
+                    "increaseWatches": "sudo sysctl -w fs.inotify.max_user_watches=20000"
+                }
+            }
+            else {
+                packageJson.scripts = {
+                    "android": "react-native run-android",
+                    "ios": "react-native run-ios",
+                    "start": "react-native start --transformer node_modules/react-native-typescript-transformer/index.js --sourceExts ts,tsx",
+                    "test": "node node_modules/jest/bin/jest.js --watch",
+                    "startEmulator": "~/Android/Sdk/tools/emulator -avd Pixel_XL_API_26 &",
+                    "cleanWatchman": "watchman watch-del-all",
+                    "increaseWatches": "sudo sysctl -w fs.inotify.max_user_watches=20000"
+                }
+                packageJson.jest = {
+                    "preset": "react-native",
+                    "globals": {
+                      "ts-jest": {
+                        "useBabelrc": true
+                      }
+                    },
+                    "transform": {
+                      "^.+\\.js$": "<rootDir>/node_modules/babel-jest",
+                      ".(ts|tsx)": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+                    },
+                    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx|js)$",
+                    "moduleFileExtensions": [
+                      "ts",
+                      "tsx",
+                      "js"
+                    ]
+                }
+            }
 
             fs.writeFileSync(this.projectRoot + '/package.json', JSON.stringify(packageJson, null, 2));
 
@@ -136,6 +240,46 @@ export class ProjectTools {
         catch (err)
         {
             console.log(err);
+            return err;
+        }
+    }
+
+    /**
+     * Creates the index.android.js and index.ios.js files
+     * 
+     * @memberof ProjectTools
+     */
+    async createEntryFiles() {
+
+        try {
+            let packageJson = JSON.parse(fs.readFileSync(this.projectRoot + '/package.json').toString());
+
+
+            let context = {projectName: packageJson.name};
+            let template = handlebars.templates['EntryPoint'];
+            
+            let entryFile = template(context);
+            
+
+            fs.writeFileSync(this.projectRoot + '/index.ios.js', entryFile);
+            fs.writeFileSync(this.projectRoot + '/index.android.js', entryFile);
+
+            return 'done';
+        }
+        catch (err) {
+            return err;
+        }
+    }
+
+    async createLocalProperties() {
+        try 
+        {
+            let localProps = `sdk.dir = ~/Android/Sdk`;
+
+            fs.writeFileSync(this.projectRoot + '/android/local.properties', localProps);
+        }
+        catch (err) 
+        {
             return err;
         }
     }
@@ -152,7 +296,7 @@ export class ProjectTools {
                     "allowJs": true,
                     "allowSyntheticDefaultImports": true,
                     "target": "es2015",
-                    "module": "commonjs",
+                    "module": "es2015",
                     "jsx": "react-native",
                     "moduleResolution": "node",
                     "experimentalDecorators": true
@@ -203,7 +347,6 @@ export class ProjectTools {
             }
             else
             {
-    
                 console.log('Please run rnutils from within your react native project.');
             }
         }
@@ -236,7 +379,7 @@ export class ProjectTools {
             if(this.userHasStorybook()){
 
                 let cmd = 'getstorybook'
-                let result = spawn.sync(cmd, null, { stdio: 'inherit' });
+                let result = spawn.sync(cmd, ['-f'], { stdio: 'inherit' });
                 return 'done';
             }
         }
@@ -246,7 +389,7 @@ export class ProjectTools {
         }
     }
 
-    async setupDebugging() {
+    async setupDebugging(isCrna: boolean) {
 
         try {
             let settings = {
@@ -301,7 +444,9 @@ export class ProjectTools {
         
             shelljs.mkdir(this.projectRoot + '/.vscode');
 
-            fs.writeFileSync(this.projectRoot + '/.vscode/settings.json', JSON.stringify(settings, null, 4));
+            if(isCrna) {
+                fs.writeFileSync(this.projectRoot + '/.vscode/settings.json', JSON.stringify(settings, null, 4));
+            }
             fs.writeFileSync(this.projectRoot + '/.vscode/launch.json', JSON.stringify(launch, null, 4));
 
             return 'done';
@@ -313,6 +458,25 @@ export class ProjectTools {
             return err;
         }
     }
+
+    /**
+     * 
+     */
+    async createBasicApp() {
+        try
+        {
+            let appTemplate = handlebars.templates['AppTsx'];
+            
+            let file = appTemplate({}); 
+
+            fs.writeFileSync(this.projectRoot + '/src/index.tsx', file);
+        }
+        catch (err)
+        {
+            return err;
+        }
+    }
+
 
     private userHasStorybook() {
         try {
@@ -343,5 +507,4 @@ export class ProjectTools {
             return false;
         }
     }
-
 }
