@@ -159,6 +159,27 @@ export class ProjectTools {
             return err;
         }
     }
+    
+    async setupTests() {
+
+        try
+        { 
+            let basicTest = handlebars.templates['BasicTest'];
+            let template = basicTest({});
+
+            fs.writeFileSync(this.projectRoot + '/__tests__/index.unit.tests.js', template);
+
+            fs.unlinkSync(this.projectRoot + '/__tests__/index.ios.js');
+            fs.unlinkSync(this.projectRoot + '/__tests__/index.android.js');
+        
+        }
+        catch (err)
+        {
+            return err;
+        }
+
+
+    }
 
     /**
      * Modify Package.json

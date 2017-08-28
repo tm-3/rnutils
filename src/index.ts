@@ -249,7 +249,7 @@ async function setupRnProject() {
             await projectTools.setupDebugging(false);
             await projectTools.addStorybook();
             await projectTools.createBasicApp();
-            
+            await projectTools.setupTests();
             //Setup testing
             //Setup app container
             // await projectTools.createLocalProperties(); 

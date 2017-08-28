@@ -220,6 +220,7 @@ function setupRnProject() {
                 yield projectTools.setupDebugging(false);
                 yield projectTools.addStorybook();
                 yield projectTools.createBasicApp();
+                yield projectTools.setupTests();
                 //Setup testing
                 //Setup app container
                 // await projectTools.createLocalProperties(); 
