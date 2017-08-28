@@ -216,14 +216,19 @@ function createNewScreen(screenName: string) {
 async function setupCrnaProject() {
 
     try {
-        await projectTools.installPackages(true);
-        await projectTools.modifyPackageJson(true);
-        await projectTools.createStructure();
-        await projectTools.createTsConfigJson();
-        await projectTools.setupDebugging(true);
-        await projectTools.modifyAppJson();
-        await projectTools.addStorybook();
-        return 'done';
+        if(projectTools.projectRoot !== null) {
+            await projectTools.installPackages(true);
+            await projectTools.modifyPackageJson(true);
+            await projectTools.createStructure();
+            await projectTools.createTsConfigJson();
+            await projectTools.setupDebugging(true);
+            await projectTools.modifyAppJson();
+            await projectTools.addStorybook();
+            return 'done';
+        }
+        else {
+            notInProject();
+        }
     }
     catch (err) {
         return err;
@@ -233,19 +238,26 @@ async function setupCrnaProject() {
 async function setupRnProject() {
 
     try {
-        await projectTools.installPackages(false);
-        await projectTools.modifyPackageJson(false);
-        await projectTools.createStructure();
-        await projectTools.createTsConfigJson();
-        await projectTools.createRnCliConfig();
-        await projectTools.createBablercFile();
-        await projectTools.createEntryFiles();
-        await projectTools.setupDebugging(false);
-        await projectTools.addStorybook();
-        //Setup testing
-        //Setup app container
-        // await projectTools.createLocalProperties();
-        return 'done';
+        if(projectTools.projectRoot !== null) {
+            await projectTools.installPackages(false);
+            await projectTools.modifyPackageJson(false);
+            await projectTools.createStructure();
+            await projectTools.createTsConfigJson();
+            await projectTools.createRnCliConfig();
+            await projectTools.createBablercFile();
+            await projectTools.createEntryFiles();
+            await projectTools.setupDebugging(false);
+            await projectTools.addStorybook();
+            await projectTools.createBasicApp();
+            
+            //Setup testing
+            //Setup app container
+            // await projectTools.createLocalProperties(); 
+            return 'done';
+        }
+        else {
+            notInProject();
+        }
     }
     catch (err) {
         return err;
@@ -259,7 +271,8 @@ function pathExists(dir: string) {
 
 function notInProject() {
     //not working. Need to learn inquirer.
-    ui.updateBottomBar('You do not appear to be in a project. Please run rnutils from within your react native project.')
+    ui.updateBottomBar('You do not appear to be in a project. Please run rnutils from within your react native project.');
+    
 }
 
 menuPrompt()

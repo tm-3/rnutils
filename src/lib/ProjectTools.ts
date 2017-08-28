@@ -2,6 +2,8 @@ import * as fs from 'fs';
 import * as shelljs from 'shelljs';
 import * as pkgUp from 'pkg-up';
 import * as spawn from 'cross-spawn';
+import * as handlebars from 'handlebars';
+var hbt = require('../lib/templates/templates.js');
 
 export class ProjectTools { 
     constructor() {
@@ -144,16 +146,9 @@ export class ProjectTools {
     async createRnCliConfig() {
         try 
         {
-            //My laziness abounds. I should just figure out how to do template strings the right way.
-            let cliConfig = 
-`module.exports = {
-    getTransformModulePath() {
-        return require.resolve('react-native-typescript-transformer')
-    },
-    getSourceExts() {
-        return ['ts', 'tsx'];
-    }
-}`;
+            
+            let cliConfigTemplate = handlebars.templates['RnCliConfig'];
+            let cliConfig = cliConfigTemplate({});
 
             fs.writeFileSync(this.projectRoot + '/rn-cli.config.js', cliConfig);
             return 'done';
@@ -183,8 +178,7 @@ export class ProjectTools {
                     "test": "node node_modules/jest/bin/jest.js --watch",
                     "cleanWatchman": "watchman watch-del-all",
                     "startEmulator": "~/Android/Sdk/tools/emulator -avd Pixel_XL_API_26 &",
-                    "preandroid": "yarn cleanWatchman & yarn startEmulator &",
-                    "increaseWatches": "sudo sysctl -w fs.inotify.max_user_watches=10000"
+                    "increaseWatches": "sudo sysctl -w fs.inotify.max_user_watches=20000"
                 }
             }
             else {
@@ -195,7 +189,7 @@ export class ProjectTools {
                     "test": "node node_modules/jest/bin/jest.js --watch",
                     "startEmulator": "~/Android/Sdk/tools/emulator -avd Pixel_XL_API_26 &",
                     "cleanWatchman": "watchman watch-del-all",
-                    "increaseWatches": "sudo sysctl -w fs.inotify.max_user_watches=10000"
+                    "increaseWatches": "sudo sysctl -w fs.inotify.max_user_watches=20000"
                 }
                 packageJson.jest = {
                     "preset": "react-native",
@@ -237,16 +231,14 @@ export class ProjectTools {
     async createEntryFiles() {
 
         try {
-            let entryFile = `import { AppRegistry } from 'react-native';
-import App from './src';
-import StorybookUI from './storybook';
+            let packageJson = JSON.parse(fs.readFileSync(this.projectRoot + '/package.json').toString());
 
-var storybook = true;
 
-storybook ? 
-AppRegistry.registerComponent('haiumobile', () => StorybookUI) :
-AppRegistry.registerComponent('haiumobile', () => App);
-`;
+            let context = {projectName: packageJson.name};
+            let template = handlebars.templates['EntryPoint'];
+            
+            let entryFile = template(context);
+            
 
             fs.writeFileSync(this.projectRoot + '/index.ios.js', entryFile);
             fs.writeFileSync(this.projectRoot + '/index.android.js', entryFile);
@@ -283,7 +275,7 @@ AppRegistry.registerComponent('haiumobile', () => App);
                     "allowJs": true,
                     "allowSyntheticDefaultImports": true,
                     "target": "es2015",
-                    "module": "commonjs",
+                    "module": "es2015",
                     "jsx": "react-native",
                     "moduleResolution": "node",
                     "experimentalDecorators": true
@@ -447,14 +439,21 @@ AppRegistry.registerComponent('haiumobile', () => App);
     }
 
     /**
-     * Creates the /src/index.tsx file.
+     * 
      */
-    async createAppTsx() {
-        //Create the file as a class
-        //Be sure index.ios.js and index.android.js import this file
-        //
+    async createBasicApp() {
+        try
+        {
+            let appTemplate = handlebars.templates['AppTsx'];
+            
+            let file = appTemplate({}); 
 
-        //Create mobx rootstore
+            fs.writeFileSync(this.projectRoot + '/src/index.tsx', file);
+        }
+        catch (err)
+        {
+            return err;
+        }
     }
 
 

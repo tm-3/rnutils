@@ -187,14 +187,19 @@ function createNewScreen(screenName) {
 function setupCrnaProject() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            yield projectTools.installPackages(true);
-            yield projectTools.modifyPackageJson(true);
-            yield projectTools.createStructure();
-            yield projectTools.createTsConfigJson();
-            yield projectTools.setupDebugging(true);
-            yield projectTools.modifyAppJson();
-            yield projectTools.addStorybook();
-            return 'done';
+            if (projectTools.projectRoot !== null) {
+                yield projectTools.installPackages(true);
+                yield projectTools.modifyPackageJson(true);
+                yield projectTools.createStructure();
+                yield projectTools.createTsConfigJson();
+                yield projectTools.setupDebugging(true);
+                yield projectTools.modifyAppJson();
+                yield projectTools.addStorybook();
+                return 'done';
+            }
+            else {
+                notInProject();
+            }
         }
         catch (err) {
             return err;
@@ -204,19 +209,25 @@ function setupCrnaProject() {
 function setupRnProject() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            yield projectTools.installPackages(false);
-            yield projectTools.modifyPackageJson(false);
-            yield projectTools.createStructure();
-            yield projectTools.createTsConfigJson();
-            yield projectTools.createRnCliConfig();
-            yield projectTools.createBablercFile();
-            yield projectTools.createEntryFiles();
-            yield projectTools.setupDebugging(false);
-            yield projectTools.addStorybook();
-            //Setup testing
-            //Setup app container
-            yield projectTools.createLocalProperties();
-            return 'done';
+            if (projectTools.projectRoot !== null) {
+                yield projectTools.installPackages(false);
+                yield projectTools.modifyPackageJson(false);
+                yield projectTools.createStructure();
+                yield projectTools.createTsConfigJson();
+                yield projectTools.createRnCliConfig();
+                yield projectTools.createBablercFile();
+                yield projectTools.createEntryFiles();
+                yield projectTools.setupDebugging(false);
+                yield projectTools.addStorybook();
+                yield projectTools.createBasicApp();
+                //Setup testing
+                //Setup app container
+                // await projectTools.createLocalProperties(); 
+                return 'done';
+            }
+            else {
+                notInProject();
+            }
         }
         catch (err) {
             return err;
