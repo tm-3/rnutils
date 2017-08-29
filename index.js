@@ -108,16 +108,15 @@ function menuPrompt() {
  */
 function createNewComponent(componentName) {
     if (projectTools.projectRoot !== null) {
-        componentName = componentName.slice(componentName.lastIndexOf('/') + 1);
-        componentName = componentName.charAt(0).toUpperCase() + componentName.slice(1);
-        if (!pathExists(projectTools.projectRoot + '/src/components/' + componentName)) {
+        let compName = componentName.slice(componentName.lastIndexOf('/') + 1);
+        compName = compName.charAt(0).toUpperCase() + compName.slice(1);
+        let path = componentName.substr(0, componentName.lastIndexOf('/') + 1);
+        if (!pathExists(projectTools.projectRoot + '/src/components/' + path + compName)) {
             //I should probably add all kinds of validation here, but I won't.
-            let componentPath = projectTools.projectRoot + '/src/components/' + (componentName.substr(0, componentName.lastIndexOf('/') + 1) + componentName);
+            let componentPath = projectTools.projectRoot + '/src/components/' + path + compName;
             shelljs.mkdir('-p', componentPath);
-            componentTools.createComponentFile(componentName, componentPath, false);
-            componentTools.createComponentIndexFile(componentName, componentPath);
-            componentTools.createComponentPropsFile(componentName, componentPath);
-            componentTools.createComponentStateFile(componentName, componentPath);
+            componentTools.createComponentFile(compName, componentPath, false);
+            componentTools.createComponentIndexFile(compName, componentPath);
         }
         else {
             ui.updateBottomBar('A component with that name already exists.');
@@ -134,15 +133,15 @@ function createNewComponent(componentName) {
  */
 function createNewStatelessComponent(componentName) {
     if (projectTools.projectRoot !== null) {
-        componentName = componentName.slice(componentName.lastIndexOf('/') + 1);
-        componentName = componentName.charAt(0).toUpperCase() + componentName.slice(1);
-        if (!pathExists(projectTools.projectRoot + '/src/components/' + componentName)) {
+        let compName = componentName.slice(componentName.lastIndexOf('/') + 1);
+        compName = compName.charAt(0).toUpperCase() + compName.slice(1);
+        let path = componentName.substr(0, componentName.lastIndexOf('/') + 1);
+        if (!pathExists(projectTools.projectRoot + '/src/components/' + path + compName)) {
             //I should probably add all kinds of validation here, but I won't.
-            let componentPath = projectTools.projectRoot + '/src/components/' + (componentName.substr(0, componentName.lastIndexOf('/') + 1) + componentName);
+            let componentPath = projectTools.projectRoot + '/src/components/' + path + compName;
             shelljs.mkdir('-p', componentPath);
-            componentTools.createComponentFile(componentName, componentPath, true);
-            componentTools.createComponentIndexFile(componentName, componentPath);
-            componentTools.createComponentPropsFile(componentName, componentPath);
+            componentTools.createComponentFile(compName, componentPath, true);
+            componentTools.createComponentIndexFile(compName, componentPath);
         }
         else {
             ui.updateBottomBar('A component with that name already exists.');
@@ -159,16 +158,15 @@ function createNewStatelessComponent(componentName) {
  */
 function createNewScreen(screenName) {
     if (projectTools.projectRoot !== null) {
-        screenName = screenName.slice(screenName.lastIndexOf('/') + 1);
-        screenName = screenName.charAt(0).toUpperCase() + screenName.slice(1);
-        if (!pathExists(projectTools.projectRoot + '/src/screens/' + screenName)) {
+        let compName = screenName.slice(screenName.lastIndexOf('/') + 1);
+        compName = compName.charAt(0).toUpperCase() + compName.slice(1);
+        let path = screenName.substr(0, screenName.lastIndexOf('/') + 1);
+        if (!pathExists(projectTools.projectRoot + '/src/components/' + path + compName)) {
             //I should probably add all kinds of validation here, but I won't.
-            let componentPath = projectTools.projectRoot + '/src/screens/' + (screenName.substr(0, screenName.lastIndexOf('/') + 1) + screenName);
+            let componentPath = projectTools.projectRoot + '/src/screens/' + path + compName;
             shelljs.mkdir('-p', componentPath);
-            componentTools.createComponentFile(screenName, componentPath, false);
-            componentTools.createComponentIndexFile(screenName, componentPath);
-            componentTools.createComponentPropsFile(screenName, componentPath);
-            componentTools.createComponentStateFile(screenName, componentPath);
+            componentTools.createComponentFile(compName, componentPath, false);
+            componentTools.createComponentIndexFile(compName, componentPath);
         }
         else {
             ui.updateBottomBar('A component with that name already exists.');
@@ -243,3 +241,10 @@ function notInProject() {
     ui.updateBottomBar('You do not appear to be in a project. Please run rnutils from within your react native project.');
 }
 menuPrompt();
+// screenName.charAt(0).toUpperCase() + screenName.slice(1);
+// let cname = 'folder/sub/component';
+// let compName = cname.slice(cname.lastIndexOf('/') + 1);
+// compName = compName.charAt(0).toUpperCase() + compName.slice(1);
+// let path = cname.substr(0, cname.lastIndexOf('/') + 1);
+// console.log(compName);
+// console.log(path); 

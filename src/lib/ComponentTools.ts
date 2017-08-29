@@ -49,42 +49,6 @@ export class ComponentTools {
         }
     }
 
-    createComponentPropsFile(componentName: string, componentPath: string) {
-        try
-        {
-                      
-            let template = handlebars.templates['IComponentProps'];
-            let context = {componentName: componentName};
-
-            let file = template(context);
-
-            fs.writeFileSync(componentPath + '/' + 'I' + componentName + 'Props' + '.ts', file);
-        }
-        catch (err) 
-        {
-            console.log(err);
-        }
-    }
-
-
-    createComponentStateFile(componentName: string, componentPath: string) {
-        try
-        {
-            
-            let template = handlebars.templates['IComponentState'];
-            let context = {componentName: componentName};
-
-            let file = template(context);
-
-            fs.writeFileSync(componentPath + '/' + 'I' + componentName + 'State' + '.ts', file);
-        }
-        catch (err) 
-        {
-            console.log(err);
-        }
-    }
-
-
     createComponentIndexFile(componentName: string, componentPath: string) {
         try
         {
