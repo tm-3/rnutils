@@ -8,8 +8,10 @@ import { Text } from 'react-native';
   *}
   */
 
-import { I{{componentName}}Props } from './'
+interface {{componentName}}Props {
 
-export const {{componentName}}: react.SFC<I{{componentName}}Props> = (props) => {
+}
+
+export const {{componentName}}: react.SFC<{{componentName}}Props> = (props) => {
     return <Text>{props}</Text>;
 }

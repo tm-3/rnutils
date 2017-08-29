@@ -8,15 +8,15 @@ templates['BasicTest'] = template({"compiler":[7,">= 4.0.0"],"main":function(con
 templates['Component'] = template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
     var helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
 
-  return "import * as react from 'react';\nimport { View } from 'react-native';\nimport { observable } from 'mobx';\nimport { observer } from 'mobx-react';\n\nimport { I"
+  return "import * as react from 'react';\nimport { View } from 'react-native';\nimport { observable } from 'mobx';\nimport { observer } from 'mobx-react';\n\ninterface "
     + alias4(((helper = (helper = helpers.componentName || (depth0 != null ? depth0.componentName : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"componentName","hash":{},"data":data}) : helper)))
-    + "Props, I"
+    + "Props {\n\n}\n\ninterface "
     + alias4(((helper = (helper = helpers.componentName || (depth0 != null ? depth0.componentName : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"componentName","hash":{},"data":data}) : helper)))
-    + "State } from './'\n\n@observer\nexport class "
+    + "State {\n    \n}\n\n@observer\nexport class "
     + alias4(((helper = (helper = helpers.componentName || (depth0 != null ? depth0.componentName : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"componentName","hash":{},"data":data}) : helper)))
-    + " extends react.Component<I"
+    + " extends react.Component<"
     + alias4(((helper = (helper = helpers.componentName || (depth0 != null ? depth0.componentName : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"componentName","hash":{},"data":data}) : helper)))
-    + "Props, I"
+    + "Props, "
     + alias4(((helper = (helper = helpers.componentName || (depth0 != null ? depth0.componentName : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"componentName","hash":{},"data":data}) : helper)))
     + "State> {\n\n    render() {\n        return(\n            <View></View>\n        )\n    }\n}";
 },"useData":true});
@@ -36,20 +36,6 @@ templates['EntryPoint'] = template({"compiler":[7,">= 4.0.0"],"main":function(co
     + alias4(((helper = (helper = helpers.projectName || (depth0 != null ? depth0.projectName : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"projectName","hash":{},"data":data}) : helper)))
     + "', () => App);";
 },"useData":true});
-templates['IComponentProps'] = template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
-    var helper;
-
-  return "export interface I"
-    + container.escapeExpression(((helper = (helper = helpers.componentName || (depth0 != null ? depth0.componentName : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"componentName","hash":{},"data":data}) : helper)))
-    + "Props {\n\n}";
-},"useData":true});
-templates['IComponentState'] = template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
-    var helper;
-
-  return "export interface I"
-    + container.escapeExpression(((helper = (helper = helpers.componentName || (depth0 != null ? depth0.componentName : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"componentName","hash":{},"data":data}) : helper)))
-    + "State {\n\n}";
-},"useData":true});
 templates['RnCliConfig'] = template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
     return "module.exports = {\n    getTransformModulePath() {\n        return require.resolve('react-native-typescript-transformer');\n    },\n    getSourceExts() {\n        return [ 'ts', 'tsx' ]\n    }\n};";
 },"useData":true});
@@ -58,11 +44,11 @@ templates['StatelessComponent'] = template({"compiler":[7,">= 4.0.0"],"main":fun
 
   return "import * as react from 'react';\nimport { Text } from 'react-native';\n\n/**TODO: Replace the rendered JSX to meet your requirements.\n  *If you need a function passed in, create it in the interface like this:\n  *export interface I"
     + alias4(((helper = (helper = helpers.componentName || (depth0 != null ? depth0.componentName : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"componentName","hash":{},"data":data}) : helper)))
-    + "Props {\n  *   someFunction: () => any      \n  *}\n  */\n\nimport { I"
+    + "Props {\n  *   someFunction: () => any      \n  *}\n  */\n\ninterface "
     + alias4(((helper = (helper = helpers.componentName || (depth0 != null ? depth0.componentName : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"componentName","hash":{},"data":data}) : helper)))
-    + "Props } from './'\n\nexport const "
+    + "Props {\n\n}\n\nexport const "
     + alias4(((helper = (helper = helpers.componentName || (depth0 != null ? depth0.componentName : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"componentName","hash":{},"data":data}) : helper)))
-    + ": react.SFC<I"
+    + ": react.SFC<"
     + alias4(((helper = (helper = helpers.componentName || (depth0 != null ? depth0.componentName : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"componentName","hash":{},"data":data}) : helper)))
     + "Props> = (props) => {\n    return <Text>{props}</Text>;\n}";
 },"useData":true});

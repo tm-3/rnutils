@@ -3,10 +3,16 @@ import { View } from 'react-native';
 import { observable } from 'mobx';
 import { observer } from 'mobx-react';
 
-import { I{{componentName}}Props, I{{componentName}}State } from './'
+interface {{componentName}}Props {
+
+}
+
+interface {{componentName}}State {
+    
+}
 
 @observer
-export class {{componentName}} extends react.Component<I{{componentName}}Props, I{{componentName}}State> {
+export class {{componentName}} extends react.Component<{{componentName}}Props, {{componentName}}State> {
 
     render() {
         return(
