@@ -1,6 +1,6 @@
 {
   "name": "rnutils",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "description": "Command line utilities for creating common react native patterns.",
   "main": "index.ts",
   "scripts": {
